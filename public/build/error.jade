@@ -1,0 +1,30 @@
+doctype html
+html
+  head
+    title= title
+
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    meta(name="robots" content="noindex,nofollow")
+
+    link(rel='stylesheet', href='/css/form_style.css')
+
+    link(rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css")
+    link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
+
+    <!-- Bootstrap -->
+    link(rel="stylesheet", type="text/css", href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+
+    <!-- Bootstrap Material Design -->
+    link(rel="stylesheet", type="text/css", href="/dist/css/bootstrap-material-design.css")
+    link(rel="stylesheet", type="text/css", href="/dist/css/ripples.min.css")
+
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+
+  body
+    .container-fluid.main(style="width:80%")
+            .jumbotron
+                h1= title
+                p= message
+                .button-container(style="width:100%;text-align:left")
+                    a.btn.btn-primary.btn-lg.btn-raised(href="https://www.videoder.net") Home
+

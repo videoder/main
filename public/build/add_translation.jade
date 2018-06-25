@@ -1,0 +1,91 @@
+extends tools_base
+
+mixin input-field(input)
+    .form-group.label-floating(id=input.parent_id style="margin-left:10px;margin-right:10px;max-width:300px")
+        label.control-label(for = input.id)= input.label
+        input.form-control(id = input.id)
+
+
+block body
+    +toolbar
+    .container-fluid.main
+        form.form-horizontal.well
+            fieldset
+                legend(style="display:inline;") Add Translation
+
+                .margin-big
+
+                +language-selector(languages)
+
+                +input-field({
+                    id: "username_input",
+                    parent_id: "username",
+                    label: "USERNAME",
+                    hint: "",
+                    description: ""
+                })
+                +input-field({
+                    id: "password_input",
+                    parent_id: "password",
+                    label: "PASSWORD",
+                    hint: "",
+                    description: ""
+                })
+                .margin-big
+                textarea(id="translation_xml" style="padding:10px;margin-left:10px;border-style:solid;border-color:lightgrey; border-width: 1px;border-radius: 5px;min-height:600px;width:100%")
+                a.btn.btn-raised.btn-primary(id="submit" href="javascript:void(0)" style="margin-top:25px;float:right") Sumbit
+
+    script.
+        $(document).ready(function () {
+            $.material.init();
+        });
+
+        var ajaxRunning = false;
+
+        $("#submit").click(function () {
+            var isValid = true;
+            var password = $('#password_input').val();
+            if (password.length < 5) {
+                isValid = false;
+                $('#password').addClass('has-error');
+            }
+
+            var username = $('#username_input').val();
+            if (username.length <= 0) {
+                isValid = false;
+                $('#username').addClass('has-error');
+            }
+
+            var translationXml = $('#translation_xml').val();
+            if (translationXml.length <= 0) {
+                isValid = false;
+                alert("Add xml to Translate");
+            }
+
+            var oldText = $("#submit").text();
+
+            if (isValid && !ajaxRunning) {
+                $('#submit').text("Submitting...");
+                var payload = {
+                    xml: translationXml,
+                    username: username,
+                    password: password,
+                    languageCode: $('#language-select').val(),
+                    appName: "videoder"
+                }
+                $.post("#{apiEndPoint}admin/translations/add?username=#{username}&password=#{password}",
+                        payload
+                        , function (data) {
+                            ajaxRunning = false;
+                            $('#submit').text(oldText);
+                            $('#password_input').val('');
+                            alert(data.message);
+                        })
+                        .fail(function () {
+                            ajaxRunning = false;
+                            alert("Call Failure");
+                            $('#submit').text(oldText);
+                        });
+            }
+        });
+

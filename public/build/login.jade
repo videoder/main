@@ -1,0 +1,77 @@
+extends tools_base
+
+mixin input-field(input, password)
+    - if(password)
+        .form-group.label-floating(id=input.parent_id style="margin-left:10px;margin-right:10px;max-width:300px")
+            label.control-label(for = input.id)= input.label
+            input.form-control(id = input.id type="password")
+    - else
+        .form-group.label-floating(id=input.parent_id style="margin-left:10px;margin-right:10px;max-width:300px")
+            label.control-label(for = input.id)= input.label
+            input.form-control(id = input.id type="text")
+
+block body
+    +toolbar
+    .container-fluid.main
+        .form-horizontal.well#input-form
+            fieldset
+                h1(style="display:block;text-align:center") Welcome
+                p.subtitle(style="text-align:center;margin-top:10px") Please Login to Proceed
+                p(id="error-message" style="color:#EF5350;text-align:center;margin-top:10px")
+
+                .margin-big
+                div(style="width:80%;margin:auto")
+                    +input-field({
+                        id: "username_input",
+                        parent_id: "username",
+                        label: "Username",
+                        hint: "",
+                        description: ""
+                    })
+
+                div(style="width:80%;margin:auto")
+                    +input-field({
+                        id: "password_input",
+                        parent_id: "password",
+                        label: "Password",
+                        hint: "",
+                        description: ""
+                    }, true)
+
+                .margin-big
+                a.btn.btn-raised.btn-primary(id="submit" href="javascript:void(0)" style="margin-top:25px;float:right") Login
+
+    script.
+        $('#submit').click(function () {
+            var isValid = true;
+            var username = $('#username_input').val();
+            if (username.length <= 0) {
+                isValid = false;
+                $('#username').addClass('has-error');
+            }
+            var password = $('#password_input').val();
+            if (password.length <= 0) {
+                isValid = false;
+                $('#password').addClass('has-error');
+            }
+            if (isValid) {
+                $('#submit').text('...');
+                $.post("/login",
+                        {
+                            username: username,
+                            password: password
+                        },
+                        function (data) {
+                            if (data.status) {
+                                location.href = data.homePageUrl;
+                            } else {
+                                $("#error-message").text("* " + data.message);
+                            }
+                            $('#submit').text('Login');
+                        })
+                        .fail(function () {
+                            alert("Something went wrong. Please try again later.");
+                            $('#submit').text('Login');
+                        });
+            }
+        });

@@ -1,0 +1,225 @@
+extends layout
+
+block extrahead
+    meta(name="title" content=title)
+    meta(name="description" content=t('home.description'))
+    meta(name="keywords" content=t('home.meta_keywords'))
+
+    meta(property="og:title" content=title)
+    meta(property="og:image" content="https://www.videoder.net/images/og_image.jpg")
+    meta(property="og:url" content="https://www.videoder.net")
+    meta(property="og:type" content="website")
+    meta(name="og:description" content=t('home.description'))
+
+    meta(name="twitter:card" content="summary")
+    meta(name="twitter:image" content="https://www.videoder.net/images/toolbar_icon.png")
+    meta(name="twitter:image:alt" content="Videoder Icon")
+    meta(name="twitter:site" content="@videoderandroid")
+    meta(name="twitter:siteLid" content="@videoderandroid")
+    meta(name="twitter:creator" content="@videoderandroid")
+    meta(name="twitter:title" content=title)
+    meta(name="twitter:description" content=t('home.description'))
+
+    meta(name="robots" content="index,follow")
+
+    <script type="application/ld+json">{"@context": "http://schema.org", "@type": "product", "url": "https://www.videoder.net", "name": "Videoder Video and Music Downloader", "image": "https://www.videoder.net/images/toolbar_icon.png", "description": "Videoder is an Android Application for downloading Music and HD Videos from YouTube, Facebook, Dailymotion etc . Over 20 million active users use Videoder. Download Videoder from official site for free"}</script>
+
+mixin suggestion-item(suggestion)
+    .suggestion-item("videoId"=suggestion.id)
+        img.suggestion-image(src=suggestion.snippet.thumbnails.medium.url , alt="Download " + suggestion.snippet.title + " MP3 and video free")
+        .suggestion-bottom-house
+            .suggestion-title #{suggestion.snippet.title}
+            .suggestion-uploader by #{suggestion.snippet.channelTitle}
+            .suggestion-separator
+            .suggestion-view-date= Number(suggestion.statistics.viewCount).toLocaleString() + t('home.views')
+            .suggestion-view-date #{suggestion.snippet.publishedAt}
+
+
+mixin suggestion-row(packet)
+    .suggestion-row-parent
+        .suggestion-row-title-bar
+            .suggestion-row-title #{packet.title}
+            .suggestion-row-view-all(cat_id=packet.id, cat_title=packet.title) VIEW ALL
+        .row-fluid
+            .col-lg-12.col-md-10
+                .scrolling-row
+                    -each suggestion in packet.items
+                        +suggestion-item(suggestion)
+
+
+block content
+    .container-fluid
+        .header
+            ._55px
+            h1#home-title= t('home.title')
+            h2#home-subtitle= t('home.subtitle')
+            .download-button(href="#")
+                img(src="/images/icons/partners/2.png" width="18px" alt="Uptodown.com" style="margin-right:10px;margin-bottom:2px")
+                = t('home.download_now')
+            a(href="http://videoder.en.uptodown.com/android" style="color:#756f6f;margin:auto;text-align:center;margin-top:10px;display:block" )= t('home.official_store')
+
+            .security_dropdown_house
+                .dropdown.unselectable.custom_dropdown
+                    #header-version(data-toggle="dropdown")
+                        span= t('home.version', {PLACEHOLDER: app_version}) + "  "
+                        span.material-icons.security_info_icon info
+                        span= "  "+t('home.security_verified')
+                    ul.dropdown-menu.verified-drop-down
+                        li.verified-item
+                            img.verified-icon(src="/images/icons/verified/1.png", alt="Security verified by McAfee")
+                            .verified-text= t('home.verified_by',{PLACEHOLDER: "McAfee"})
+                        li.verified-item
+                            img.verified-icon(src="/images/icons/verified/2.png", alt="Security verified by CM Security")
+                            .verified-text= t('home.verified_by',{PLACEHOLDER: "CM Security"})
+                        li.verified-item
+                            img.verified-icon(src="/images/icons/verified/3.png", alt="Security verified by Lookout Security")
+                            .verified-text= t('home.verified_by',{PLACEHOLDER: "Lookout Security"})
+            .social-house-home-parent
+                .social-house-home
+                  .f-home
+                      .fb-like(data-href="https://www.facebook.com/videoder" data-layout="button_count" data-action="like" data-show-faces="true" data-share="false")
+                  .g-home
+                      .g-plusone(data-size="tall" data-annotation="inline" data-width="120" data-href="https://www.videoder.net")
+            .header-image
+                img(src="/images/main.jpg" alt="Videoder Showcase Image")
+
+
+        -var add = true
+        -if(feed||force_search)
+            div
+                #half-input-div
+                    .input-div
+                        i.material-icons.search-icon
+                            b search
+                        input.transparent-input-box#searchinput(placeholder=t('home.search_hint'), onkeypress='handleKeyPress(event)')
+
+            ._22px
+            ._22px
+            //-each packet in feed
+            //    -if(packet.items)
+            //        -add = true
+            //-if(add)
+            //    ._22px
+            //    ._22px
+
+        -if(feed)
+            -each packet in feed
+                -if(packet.items)
+                    +suggestion-row(packet)
+
+        -var screenshots = ["0.jpg","1.jpg","2.jpg","3.jpg","4.jpg","5.jpg","6.jpg","7.jpg","8.jpg"];
+        -var screenshots_alts = ["Explore watch and download trending Youtube music, videos, movies","Watch and download youtube videos in full HD or SD qualities","Download complete youtube playlist with just on tap","Batch Downloading,select and download multiple videos int one tap","Download videos from your favourite youtube channels in one tap","Search and download music and videos from 144P to 4K 60fps in full HD","Download videos from trending channels in one go","Advanced download manager with search and batched actions to manage all your downloads efficiently","In built browser lets you browse your favourite streaming sites and download videos and music on the go"];
+        -var features = ["a","b","c","d","e","f","g"];
+        -var features_alts = ["Download unlimited youtube music, videos, movies in all resolutions from 144p to  1080P FULL HD","No Annoying ads, Completely ads free","Download youtube videos in all formats and resolutions :mp3, 4K, 1080P, 720P, 480P, 320P, 240P, 144P, 3gp, mp4, webm, flv, 60fps","Batch Downloading,select and download multiple videos int one tap","Extremely beautiful and easy to use User Interface","In built browser lets you browse your favourite streaming sites and download videos and music on the go","Download videos from trending channels and youtube playlist in one go","Download from facebook, vimeo, instagram, whatsappdaily, dailymotion, vine, metacafe, liveleak"];
+
+        .app-info-house-container
+            .app-info-house
+                .app-feature-title= t('home.about_videoder_app')
+                .app-des= t('home.app-des')
+                .app-feature-title= t('home.app_screenshots')
+                .row-fluid
+                    .col-lg-12.col-md-10
+                        .scrolling-row
+                            - for (var x = 0; x < screenshots.length; x++)
+                                .screen-shot-house
+                                    img(src="/images/screen_shots/small/"+screenshots[x], alt = screenshots_alts[x])
+
+
+
+                .app-feature-title= t('home.app_features')
+                -for (var x = 0; x < features.length; x++)
+                    .feature-separator
+                    .app-feature-item
+                        img.app-feature-icon(src="/images/icons/home_features/"+features[x]+".png", alt=features_alts[x])
+                        .app-feature-text-house
+                            .app-feature-heading= t('home.features_titles.' +features[x])
+                            .app-feature-text= t('home.features.'+features[x])
+                .feature-separator
+                .app-feature-item
+                    img.app-feature-icon(src="/images/icons/home_features/h.png" alt="Download from facebook, vimeo, instagram, whatsappdaily, dailymotion, vine, metacafe, liveleak")
+                    .app-feature-text-house
+                        .app-feature-heading= t('home.features_titles.h')
+                        .app-feature-text= t('home.features.h',{PLACEHOLDER:"facebook.com , instagram.com , vevo.com , whatsappdaily.com , dailymotion.com , vimeo.com , vine.co , metacafe.com , liveleak.com + 170 more websites"})
+
+
+            .section-title= t('home.reviews_by_major_sites')
+        .reviews-house
+            .review-card-house#androidpit-review
+                .reviews-item-title-house
+                    img.review-item-title-image(src = '/images/icons/home_review_icons/androidpit.png', alt="AndroidPit reviews videoder as the best youtube downlader in the world")
+                .review-item-text= t('home.reviews.androidpit')
+
+
+            .review-card-house#uptodown-review
+                .reviews-item-title-house
+                    img.review-item-title-image-small(src = '/images/icons/home_review_icons/uptodown.png', alt="uptodown reviews videoder as the best youtube downlader in the world")
+                .review-item-text= t('home.reviews.uptodown')
+
+
+
+        -var partnernames = ["cnet.com","Uptodown.com","Apptoide.com","APKMirror.com","Aletnativeto","APKPure.com","DownloadAtoZ","Getjar.com","Portal Programas"];
+        -var partnerUrls = ["download.cnet.com/Videoder/3000-2071_4-76476497.html","videoder.en.uptodown.com/android","www.aptoide.com/search/view?search_top=videoder&x=0&y=0","www.apkmirror.com/?s=videoder&post_type=app_release","alternativeto.net/software/videoder-free-video-and-music-downloader/","apkpure.com/videoder/com.rahul.videoderbeta","m.downloadatoz.com/apps/com.rahul.videoder,166463/","www.getjar.com/categories/entertainment-apps/video/Videoder-Video-and-Music-downloader-879039","www.portalprogramas.com/en/videoder/android/download"];
+        -var partnerimgs = ["1","2","3","4","5","6","7","8","9"];
+        -var heights = ["35","35","35","35","120","120","120","120","120"];
+        .partner-store-house
+            .section-title= t('home.partner_stores')
+            .partner-items-container
+                - for (var x = 0; x < partnerimgs.length; x++)
+                    .partner-store-item(link_url=partnerUrls[x])
+                        img(src="/images/icons/partners/"+partnerimgs[x]+".png" , width=heights[x]+"px", alt=partnernames[x])
+                        .partner-store-text= partnernames[x]
+
+        +bottom
+        ._55px.blue
+
+
+        +download-bottom-button
+
+
+        +toolbar
+
+        script.
+            $(function () {
+
+                $(".toolbar").addClass('smaller');
+                $(".toolbar-text").addClass('smaller');
+                $(".text-bold").text('');
+                $(".toolbar-icon").addClass('smaller');
+                $(".language-name").addClass('visible');
+                var title;
+                $(window).scroll(function () {
+
+
+                    var scroll = $(window).scrollTop();
+
+                    if (scroll >= 350) {
+                        $(".download_now_bottom_house").addClass('gone');
+                    } else {
+                        $(".download_now_bottom_house").removeClass('gone');
+                    }
+                });
+            });
+
+
+
+
+
+
+
+
+//if (scroll >= 50) {
+//    $(".toolbar").addClass('smaller');
+//$(".toolbar-text").addClass('smaller');
+//$(".text-bold").text('');
+//$(".toolbar-icon").addClass('smaller');
+//$(".language-name").addClass('visible');
+//} else {
+//if(!title||title==NaN)
+//    title = $(".text-bold").text();
+//
+//$(".toolbar").removeClass('smaller');
+//$(".toolbar-text").removeClass('smaller');
+//$(".text-bold").text(title);
+//$(".toolbar-icon").removeClass('smaller');
+//$(".language-name").removeClass('visible');
+//}

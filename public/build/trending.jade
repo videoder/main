@@ -1,0 +1,77 @@
+extends layout
+
+mixin suggestion-item(suggestion)
+    .suggestion-item-view-all("videoId"=suggestion.id)
+        img.suggestion-image(src=suggestion.snippet.thumbnails.medium.url alt="Download " + suggestion.snippet.title + " MP3 and video free")
+        .suggestion-bottom-house
+            .suggestion-title #{suggestion.snippet.title}
+            .suggestion-uploader by #{suggestion.snippet.channelTitle}
+            .suggestion-separator
+            .suggestion-view-date= Number(suggestion.statistics.viewCount).toLocaleString() + t('home.views')
+            .suggestion-view-date #{suggestion.snippet.publishedAt}
+
+
+block extrahead
+    meta(name="title" content=title)
+    meta(name="description" content=t('home.description'))
+    meta(name="keywords" content=t('home.meta_keywords'))
+
+    meta(property="og:title" content=title)
+    meta(property="og:url" content="https://www.videoder.net")
+    meta(property="og:type" content="website")
+    meta(name="og:description" content=t('home.description'))
+
+    meta(name="twitter:card" content="summary")
+    meta(name="twitter:image" content="https://www.videoder.net/images/toolbar_icon.png")
+    meta(name="twitter:image:alt" content="Videoder Icon")
+    meta(name="twitter:site" content="@videoderandroid")
+    meta(name="twitter:siteLid" content="@videoderandroid")
+    meta(name="twitter:creator" content="@videoderandroid")
+    meta(name="twitter:title" content=title)
+    meta(name="twitter:description" content=t('home.description'))
+
+    meta(name="robots" content="index,follow")
+
+block content
+
+    .container-fluid
+
+        .search-items-house
+            ._22px
+            ._22px
+            ._22px
+            .search-title= t('trending.trending',{PLACEHOLDER:cat_title})
+            -if(videos)
+                -if(videos.length==0)
+                    .search-error= t('search.no_results_found')
+                -each video in videos
+                    +suggestion-item(video)
+
+            -if(error)
+                .search-error= t('search.error_try_again')
+
+            ._22px
+            +bottom
+            ._55px.blue
+
+        +toolbar
+        +download-bottom-button
+
+        script.
+            $(function () {
+
+                var title;
+                $(".download_now_bottom_house").addClass('gone');
+                $(".toolbar").addClass('smaller');
+                $(".toolbar-text").addClass('smaller');
+                $(".text-bold").text('');
+                $(".toolbar-icon").addClass('smaller');
+                $(".language-name").addClass('visible');
+            });
+
+
+
+
+
+
+

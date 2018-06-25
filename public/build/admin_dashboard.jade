@@ -1,0 +1,24 @@
+extends tools_base
+
+mixin optionItem(name, url)
+    .margin-medium
+    .option-item(style="margin-left:16px")
+        a(href=url) • #{name}
+
+block body
+    +toolbar
+    .container-fluid.main
+        .form-horizontal.well(style='min-height:350px')
+            .margin-small
+            h2(style="margin:auto;display:table") Welcome #{user.name}
+            .margin-small
+            - var puns = ['Hope you are having a nice day!', 'What do you wanna do?', 'AwwMAN!! I love this tool', 'Lets see. There aren\'t many options here']
+            - var randomIndex = Math.floor(Math.random() * 4)
+            label(style="margin:auto;display:table")=puns[randomIndex]
+
+            .margin-medium
+            +optionItem("Send Push", "/admin/push")
+            +optionItem("Check Translation Status", "/admin/translations")
+            +optionItem("Check Translation Graph", "/admin/translations/graph")
+
+            a.btn.btn-raised.btn-primary(href="/logout" style="margin-top:70px;float:right") Logout

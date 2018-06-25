@@ -1,0 +1,145 @@
+// @author varun on 20/06/16.
+doctype html
+html
+    head
+        title= title
+
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        meta(name="robots" content="noindex")
+
+        link(rel='stylesheet', href='/css/form_style.css')
+
+        link(rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css")
+        link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
+
+        <!-- Bootstrap -->
+        link(rel="stylesheet", type="text/css", href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+
+        <!-- Bootstrap Material Design -->
+        link(rel="stylesheet", type="text/css", href="/dist/css/bootstrap-material-design.css")
+        link(rel="stylesheet", type="text/css", href="/dist/css/ripples.min.css")
+
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+
+
+    body(style="width:100%")
+        block content
+        script(src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js")
+        script(src="/dist/js/material.js")
+        script(src="/dist/js/ripples.min.js")
+        script.
+            var ajaxRunning = false;
+
+            $(document).ready(function () {
+                $.material.init();
+            });
+
+            $("#save-prompt").click(function () {
+                var isValid = true;
+                var promptName = $('#prompt-name').val();
+                var maxVersionInt = $('#max-version-int').val();
+                var minVersionInt = $('#min-version-int').val();
+                var minDownloadCount = $('#min-download-int').val();
+                var deeplink = $('#deeplink').val();
+                var password = $('#password').val();
+                var username = $('#username').val();
+                var showTitle = $('#show-title-switch').is(":checked");
+                var showMessage = $('#show-message-switch').is(":checked");
+                var showNegative = $('#negative-button-switch').is(":checked");
+                var showPositive = $('#positive-button-switch').is(":checked");
+
+                var localeDataSet = [];
+
+                var localesCount = $('#regions-data-container').children().length;
+                for (var i = 0; i < localesCount; i++) {
+                    localeData = {};
+                    var language = $('#regions-data-container').children().eq(i).find('h3').text();
+                    if ($('#title-' + language).val().length > 0) {
+                        localeData['title'] = $('#title-' + language).val();
+                    }
+
+                    if ($('#message-' + language).val().length > 0) {
+                        localeData['message'] = $('#message-' + language).val();
+                    }
+
+                    if ($('#positive-button-' + language).val().length > 0) {
+                        localeData['positive_button'] = $('#positive-button-' + language).val();
+                    }
+
+                    if ($('#negative-button-' + language).val().length > 0) {
+                        localeData['negative_button'] = $('#negative-button-' + language).val();
+                    }
+
+                    if (!jQuery.isEmptyObject(localeData)) {
+                        if (language.length > 0) {
+                            localeData['language'] = language;
+                            localeDataSet.push(localeData);
+                        }
+                    }
+                }
+
+                if (jQuery.isEmptyObject(localeDataSet)) {
+                    isValid = false;
+                    alert("Please fill atleast one Locale Content");
+                }
+
+                if (promptName.length <= 0) {
+                    isValid = false;
+                    $('#prompt-name-container').addClass('has-error');
+                }
+
+                if (password.length <= 0) {
+                    isValid = false;
+                    $('#password_container').addClass('has-error');
+                }
+
+                if (username.length <= 0) {
+                    isValid = false;
+                    $('#username_container').addClass('has-error');
+                }
+
+                if (!ajaxRunning && isValid) {
+                    ajaxRunning = true;
+                    if (!maxVersionInt) {
+                        maxVersionInt = 1000;
+                    }
+                    if (!minVersionInt) {
+                        minVersionInt = 0;
+                    }
+                    if (!minDownloadCount) {
+                        minDownloadCount = 0;
+                    }
+                    var payload = {
+                        prompt_name: promptName,
+                        max_version: maxVersionInt,
+                        min_version: minVersionInt,
+                        min_download_count: minDownloadCount,
+                        deeplink: deeplink,
+                        locale_data: localeDataSet,
+                        show_title: showTitle,
+                        show_message: showMessage,
+                        show_negative: showNegative,
+                        show_positive: showPositive,
+                        username: username,
+                        password: password
+                    };
+
+                    $(this).text("Saving...");
+                    $.post("#{api_end_point}admin/prompt/create?username=#{username}&password=#{password}",
+                            payload,
+                            function (data) {
+                                ajaxRunning = false;
+                                $('#save-prompt').text("Save Prompt");
+                                $('#password').val('');
+                                alert(data.message);
+                            })
+                            .fail(function () {
+                                ajaxRunning = false;
+                                alert("Call Failure");
+                                $('#save-prompt').text("Save Prompt");
+                            });
+                    console.log(payload);
+                }
+            });
+
+

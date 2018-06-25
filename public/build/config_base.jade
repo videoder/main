@@ -1,0 +1,143 @@
+// @author varun on 20/06/16.
+doctype html
+html
+    head
+        title= title
+
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        meta(name="robots" content="noindex,nofollow")
+
+        link(rel='stylesheet', href='/css/form_style.css')
+
+        link(rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css")
+        link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
+
+        <!-- Bootstrap -->
+        link(rel="stylesheet", type="text/css", href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+
+        <!-- Bootstrap Material Design -->
+        link(rel="stylesheet", type="text/css", href="/dist/css/bootstrap-material-design.css")
+        link(rel="stylesheet", type="text/css", href="/dist/css/ripples.min.css")
+
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+
+
+    body(style="width:100%")
+        block content
+        script(src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js")
+        script(src="/dist/js/material.js")
+        script(src="/dist/js/ripples.min.js")
+        script.
+            var ajaxRunning = false;
+            $(document).ready(function () {
+                $.material.init();
+                $('#adtype-select option:eq(' + #{data_file.current_ad_type} + ')').prop('selected', true);
+            });
+
+            $("#remove-whats-new").click(function () {
+                var index = $("#whats-new-container").children().length - 1;
+                console.log(index);
+                $("#whats-new-container").children().eq(index).remove();
+            });
+
+            $("#add-whats-new").click(function () {
+                $("#whats-new-container").append(
+                        '<div class="form-group label-placeholder" style="margin-left:30px">' +
+                        '<input type="text" class="form-control" id="i5p"/>' +
+                        '</div>');
+            });
+
+
+            $("#update-config").click(function () {
+                var isValid = true;
+                var signature = $('#signature').val();
+                var versionId = $('#version_int').val();
+                var versionName = $('#version_name').val();
+                var updateLink = $('#apk_link').val();
+                var whatsNewArray = [];
+                var updateDataEnabled = $('#latest_app_switch').is(":checked");
+                var learnInfoEnabled = $('#learn_info_switch').is(":checked");
+                var learnInfoShow = $('#learn_info_show_switch').is(":checked");
+                var learnInfoIdentifier = $('#learn_info_identifier').val();
+                var adType = $('#adtype-select').val()
+                var password = $('#password').val();
+                var username = $('#username').val();
+
+                $("#whats-new-container").children('div').each(function () {
+                    if ($(this).find('input').val().length > 0) {
+                        whatsNewArray.push($(this).find('input').val());
+                    }
+                });
+
+                if (signature.length <= 0) {
+                    isValid = false;
+                    $('#signature_container').addClass('has-error');
+                    $('#signature-title').addClass('text-danger');
+                } else {
+                    $('#signature_container').removeClass('has-error');
+                    $('#signature-title').removeClass('text-danger');
+                }
+
+                if (versionId.length <= 0 || versionId <= 0) {
+                    isValid = false;
+                    $('#version_int_container').addClass('has-error');
+                }
+
+                if (versionName.length <= 0) {
+                    isValid = false;
+                    $('#version_name_container').addClass('has-error');
+                }
+
+                if (updateLink.length <= 0) {
+                    isValid = false;
+                    $('#apk_link_container').addClass('has-error');
+                }
+
+                if (learnInfoIdentifier.length <= 0) {
+                    isValid = false;
+                    $('#learn_info_identifier_container').addClass('has-error');
+                }
+
+                if (password.length <= 0) {
+                    isValid = false;
+                    $('#password_container').addClass('has-error');
+                }
+
+                if (username.length <= 0) {
+                    isValid = false;
+                    $('#username_container').addClass('has-error');
+                }
+
+                if (isValid && !ajaxRunning) {
+                    ajaxRunning = true;
+                    $(this).text("Updating...");
+                    $.post("#{api_end_point}admin/config/update?username=#{username}&password=#{password}",
+                            {
+                                signature: signature,
+                                version_id: versionId,
+                                version_name: versionName,
+                                update_link: updateLink,
+                                whats_new: whatsNewArray,
+                                update_data_enabled: updateDataEnabled,
+                                learn_info_enabled: learnInfoEnabled,
+                                learn_info_show: learnInfoShow,
+                                learn_info_identifier: learnInfoIdentifier,
+                                ad_type: adType,
+                                password: password,
+                                username: username
+                            },
+
+                            function (data) {
+                                ajaxRunning = false;
+                                $('#update-config').text("Update Config");
+                                $('#password').val('');
+                                alert(data.message);
+                            })
+                            .fail(function () {
+                                ajaxRunning = false;
+                                alert("Call Failure");
+                                $('#update-config').text("Update Config");
+                            });
+                }
+
+            });

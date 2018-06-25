@@ -1,0 +1,144 @@
+extends layout
+
+
+block extrahead
+    meta(name="title" content=title)
+    meta(name="description" content=t('home.description'))
+    meta(name="keywords" content=t('home.meta_keywords'))
+
+    meta(property="og:title" content=title)
+    meta(property="og:url" content="https://www.videoder.net")
+    meta(property="og:type" content="website")
+    meta(name="og:description" content=t('home.description'))
+
+    meta(name="twitter:card" content="summary")
+    meta(name="twitter:image" content="https://www.videoder.net/images/toolbar_icon.png")
+    meta(name="twitter:image:alt" content="Videoder Icon")
+    meta(name="twitter:site" content="@videoderandroid")
+    meta(name="twitter:siteLid" content="@videoderandroid")
+    meta(name="twitter:creator" content="@videoderandroid")
+    meta(name="twitter:title" content=title)
+    meta(name="twitter:description" content=t('home.description'))
+
+    meta(name="robots" content="index,follow")
+
+block content
+
+    .container-fluid.how-to-page-house
+
+        ._55px
+        ._15px
+        div#fade_in_house(style="opacity: 0.0;")
+          img.donation-hearts(src="/images/donations_hearts.png" width="30%" alt="Donation for Videoder App")
+
+          .donations-content
+            .donations-title Your love makes us stronger
+
+
+             .donations-option-card
+                div
+                  .dropdown.donation_currency_dropdown
+                      -var currencies = ["U.S. Dollar","Brazilian Real","Mexican Peso","Philippine Peso","Russian Ruble","Hong Kong Dollar","Australian Dollar","Canadian Dollar"];
+                      -var currencies_abbrv = ["USD","BR Real","MX Peso","PHL Peso","RUB","H.K. Dollar","AUS Dollar","CAN Dollar"]
+                      -var currencies_codes = ["USD","BRL","MXN","PHP","RUB","HKD","AUD","CAD"];
+                      .donation-currency-picker#selected_curreny(data-toggle="dropdown" data-abbrv=currencies_abbrv[0] data-code=currencies_codes[0])= currencies_abbrv[0]
+
+                      ul.dropdown-menu.scrollable-menu.pull-right#donation_currency_list
+                          - for (var i=0; i<currencies.length; i++)
+                              li.language-item( data-abbrv=currencies_abbrv[i] data-code=currencies_codes[i] )= currencies[i]
+
+
+                  div(style="display:flex")
+                    input.donation-input-field#donation_amount_input(placeholder="Enter amount to donate ..." type=text pattern='[0-9\\s]{1,100}')
+                .donation-amount-error#donation_amount_error Please enter a valid amount
+                .donate-paypal-button#donate_button DONATE
+
+             .or-line-container
+                 .or-line or
+             .donations-option-card
+                 .donations-playstore-title Donate by buying our app 'Subtle Wallpapers' from Play Store
+                 .donate-paypal-button#google_play_donate_button DONATE WITH GOOGLE PLAY
+
+
+
+        ._22px
+        +bottom
+        ._55px.blue
+
+        +toolbar(true)
+
+
+
+        script.
+
+            $('#donation_currency_list').on('click','*', function (event) {
+                var item = $(this);
+                var abbrv = item.data('abbrv');
+                var code = item.data('code');
+                var selector = $(selected_curreny);
+                selector.text(abbrv);
+                selector.data("abbrv",abbrv);
+                selector.data("code",code);
+
+                if(typeof(Storage) !== "undefined"){
+                    localStorage.setItem("donation_currency_abbrv", abbrv);
+                    localStorage.setItem("donation_currency_code", code);
+                }
+            });
+            $("#donation_amount_input").on('change textInput input',function () {
+                $('#donation_amount_error').show()
+
+                var amountInput = $(this);
+                var amount = +(amountInput.val().split(' ').join(""));
+                if(amount===0||!amount){
+                    $('#donation_amount_error').show()
+                }else{
+                    $('#donation_amount_error').hide()
+                    if(typeof(Storage) !== "undefined"){
+                        localStorage.setItem("donation_amount", "" + amount);
+                    }
+                }
+            });
+
+
+
+            $( document ).ready(
+                    function(){
+                        $('#donation_amount_error').hide()
+                        if(typeof(Storage) !== "undefined"){
+                            var selector = $(selected_curreny);
+                            var abbrv = localStorage.getItem("donation_currency_abbrv");
+                            var code = localStorage.getItem("donation_currency_code");
+                            var donationAmount = localStorage.getItem("donation_amount");
+                            if(abbrv===null)
+                                abbrv = "USD";
+                            if(code===null)
+                                code = "USD";
+                            if(donationAmount===null)
+                                donationAmount = ""
+                            var amountInput = $(donation_amount_input);
+                            amountInput.val(donationAmount);
+                            selector.text(abbrv);
+                            selector.data("abbrv",abbrv);
+                            selector.data("code",code);
+                        }
+                        $( "#fade_in_house" ).fadeTo( 200 , 1, function() {
+                        });
+
+                    }
+            );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

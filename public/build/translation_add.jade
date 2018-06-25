@@ -1,0 +1,55 @@
+extends translation_base
+
+block body
+    +toolbar
+    .container-fluid.main
+        form.form-horizontal.well
+            fieldset
+                legend(style="display:inline;") Add Translation
+
+                .margin-big
+
+                +language-selector(languages)
+
+                .margin-big
+                textarea(id="translation_xml" style="padding:10px;margin-left:10px;border-style:solid;border-color:lightgrey; border-width: 1px;border-radius: 5px;min-height:600px;width:100%")
+                a.btn.btn-raised.btn-primary(id="submit" href="javascript:void(0)" style="margin-top:25px;float:right") Sumbit
+
+    script.
+        var ajaxRunning = false;
+        var submitEle = $("#submit");
+        submitEle.click(function () {
+            if (confirm('Are you sure you want to save this thing into the database?')) {
+                var isValid = true;
+                var translationXml = $('#translation_xml').val();
+                if (translationXml.length <= 0) {
+                    isValid = false;
+                    alert("Add xml to Translate");
+                }
+
+                var oldText = submitEle.text();
+
+                if (isValid && !ajaxRunning) {
+                    $('#submit').text("Submitting...");
+                    var payload = {
+                        xml: translationXml,
+                        language: $('#language-select').val(),
+                        appName: "videoder_android"
+                    }
+                    $.post("/admin/translations/add",
+                            payload
+                            , function (data) {
+                                ajaxRunning = false;
+                                $('#submit').text(oldText);
+                                $('#password_input').val('');
+                                alert(data.message);
+                            })
+                            .fail(function () {
+                                ajaxRunning = false;
+                                alert("Call Failure");
+                                $('#submit').text(oldText);
+                            });
+                }
+            }
+        });
+

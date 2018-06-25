@@ -1,0 +1,132 @@
+extends translation_base
+
+block body
+    +toolbar
+    .container-fluid.main
+        form.form-horizontal.well
+            fieldset
+                h1(style="margin:auto;text-align:center;margin-top:20px") Hello #{translatorName}
+                .subtitle(style="margin:auto;text-align:center;margin-top:15px") Videoder Translation Manager
+                .margin-big
+                .h4 Language:&ensp;
+                    span.color-accent= languageName
+                - if (selectedLanguage != "en")
+                    .h4(style="float:left;display:flex") Show only untranslated values:
+                        .togglebutton
+                            label
+                                input(type="checkbox" id="show-untranslated-strings-switch"  checked style="margin-left:20px")
+
+                    .margin-medium
+                    - var untranslatedCount = 0
+                    - for (var i = 0; i< translationData.length; i++)
+                        - var translated = false
+                        - for (var j = 0; j < translationData[i].values.length; j++)
+                            - if(translationData[i].values[j]["language"] != "en")
+                                - translated = true;
+                        - if(!translated)
+                            - untranslatedCount = untranslatedCount + 1
+                    .margin-medium
+                    .h4 Total strings:&ensp;
+                        span.color-accent=translationData.length
+                    .margin-very-small
+                    .h4 Total untranslated strings:&ensp;
+                        span.color-error=untranslatedCount
+                - else
+                    .h4 Total strings:&ensp;
+                        span.color-accent=translationData.length
+
+                .margin-big
+
+                - for (var i = 0; i< translationData.length; i++)
+                    .translation-item-container
+                        +translationElement(translationData[i], false)
+
+    script.
+        function updateStringValue(key, value) {
+            var saveEle = $('.save[string_key=' + key + ']');
+            $.post("/tools/translations/suggestion/add",
+                    {
+                        username: "#{translatorUserName}",
+                        stringKey: key,
+                        language: "#{selectedLanguage}",
+                        stringValue: value,
+                        appName: "videoder_android"
+                    }, function (data) {
+                        console.log(data);
+                        saveEle.text("Save");
+                        if (data.status) {
+                            $('.container-suggestion[string_key=' + key + ']').show();
+                            var suggestionEle = $('.suggestion[string_key=' + key +']');
+                            suggestionEle.hide();
+                            suggestionEle.text(value);
+                            suggestionEle.show('slow');
+                            saveEle.hide();
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .fail(function () {
+                        saveEle.text("Save");
+                        alert("Call Failure");
+                    });
+        }
+
+        var suggEle = $('.suggestion-input');
+
+        suggEle.on('input', function () {
+            if ($(this).val().length == 0) {
+                console.log("hide");
+                $(this).parent().find('.save').hide();
+            } else {
+                console.log("show");
+                $(this).parent().find('.save').show();
+            }
+        });
+
+        suggEle.on('keypress', function (e) {
+            if (e.which == 13) {
+                if ($(this).val().length > 0) {
+                    var key = $(this).attr('string_key');
+                    updateStringValue(key, $(this).val());
+                }
+            }
+        });
+
+        $('.save').click(function () {
+            var stringKey = $(this).attr('string_key');
+            var suggestion = $('.suggestion-input[string_key=' + stringKey + ']').val();
+            if (suggestion.length > 0) {
+                updateStringValue(stringKey, suggestion);
+            }
+        });
+
+        $('#show-untranslated-strings-switch').change(
+                function () {
+                    var showOnlyUntranslatedStrings = $(this).is(":checked");
+                    $('.translation-item').each(function (index, item) {
+                        if (!showOnlyUntranslatedStrings) {
+                            $(item).show();
+                        } else {
+                            var notTranslatedView = $(item).find('.not-translated');
+                            if (notTranslatedView.length <= 0
+                                    || !notTranslatedView.is(':visible')) {
+                                $(item).hide();
+                            }
+                        }
+                    });
+                });
+
+        $(document).ready(function (){
+                var showOnlyUntranslatedStrings = $("#show-untranslated-strings-switch").is(":checked");
+                $('.translation-item').each(function (index, item) {
+                    if (!showOnlyUntranslatedStrings) {
+                        $(item).show();
+                    } else {
+                        var notTranslatedView = $(item).find('.not-translated');
+                        if (notTranslatedView.length <= 0
+                                || !notTranslatedView.is(':visible')) {
+                            $(item).hide();
+                        }
+                    }
+                });
+        });

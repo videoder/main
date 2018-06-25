@@ -1,0 +1,429 @@
+extends translation_base
+
+block body
+    +toolbar
+    .container-fluid.main
+        form.form-horizontal.well
+            fieldset
+                h2(style="text-align:center") Translations Manager
+                .margin-big
+                +language-selector(languages)
+
+                - if (selectedLanguage != "en")
+                    - var untranslatedCount = 0
+                    - for (var i = 0; i< translationData.length; i++)
+                        - var translated = false
+                        - for (var j = 0; j < translationData[i].values.length; j++)
+                            - if(translationData[i].values[j]["language"] != "en")
+                                - translated = true;
+                        - if(!translated)
+                            - untranslatedCount = untranslatedCount + 1
+                    .margin-medium
+                    .h4 Total strings:&ensp;
+                        span.color-accent=translationData.length
+                    .margin-very-small
+                    .h4 Total untranslated strings:&ensp;
+                        span.color-error=untranslatedCount
+                    .margin-small
+                    .h4(style="float:left;display:flex") Show only untranslated values:
+                        .togglebutton
+                            label
+                                input(type="checkbox" id="show-untranslated-strings-switch"  checked style="margin-left:20px")
+                    .margin-big
+                - else
+                    .h4 Total strings:&ensp;
+                        span.color-accent=translationData.length
+
+                .margin-big
+                .h4(style="float:left;display:flex") Show only values with suggestions:
+                    .togglebutton
+                        label
+                            input(type="checkbox" id="show-suggested-strings-switch"  unchecked style="margin-left:20px")
+
+                .margin-big
+
+                h4(style="float:left;display:inline") Accept all strings of user :
+                    input(id="accept-username" placeholder="Username" style="margin-left:15px")
+                    a.btn.btn-raised.btn-xs.btn-primary(id="accept-username-button" href="javascript:void(0)" style="margin-left:10px;") Go
+
+                h4(style="float:left;display:inline") Discard all strings of user :
+                    input(id="discard-username" placeholder="Username" style="margin-left:15px")
+                    a.btn.btn-raised.btn-xs.btn-primary(id="discard-username-button" href="javascript:void(0)" style="margin-left:10px;") Go
+
+                .margin-big
+                .margin-big
+                .margin-big
+                .margin-big
+                .margin-big
+                .margin-big
+
+                label(style="float:left") Strings
+                - for (var i = 0; i< translationData.length; i++)
+                    .translation-item-container(string_key=translationData[i].key)
+                        +translationElement(translationData[i], true)
+
+                a.btn.btn-raised.btn-primary(id="download-strings" href="javascript:void(0)" style="margin-top:25px;float:right") Download Strings
+
+    script.
+        function updateTranslationApi(key, value, cb) {
+            $.post("/admin/translations/edit",
+                    {
+                        stringKey: key,
+                        language: "#{selectedLanguage}",
+                        stringValue: value,
+                        appName: "videoder_android"
+                    },
+                    function (data) {
+                        cb(null, data);
+                    })
+                    .fail(function () {
+                        cb("failed");
+                    });
+        }
+
+        function discardSuggestionApi(stringKey, translatorId, cb) {
+            $.post("/tools/translations/suggestion/discard",
+                    {
+                        stringKey: stringKey,
+                        language: "#{selectedLanguage}",
+                        appName: "videoder_android",
+                        translatorId: translatorId
+                    },
+                    function (data) {
+                        if (data.status) {
+                            cb(null);
+                        } else {
+                            cb(data.message);
+                        }
+                    })
+                    .fail(function () {
+                        cb("error");
+                    });
+        };
+
+        function keepSuggestionApi(stringKey, stringValue, translatorId, cb) {
+            $.post("/admin/translations/suggestion/keep",
+                    {
+                        stringKey: stringKey,
+                        language: "#{selectedLanguage}",
+                        stringValue: stringValue,
+                        appName: "videoder_android",
+                        translatorId: translatorId
+                    },
+                    function (data) {
+                        cb(null, data);
+                    })
+                    .fail(function () {
+                        cb("error");
+                    });
+        }
+
+        function updateStringValue(key, value, cb) {
+            updateTranslationApi(key, value, function (err, data) {
+                if (err) {
+                    cb(err);
+                    alert("Call Failure");
+                } else {
+                    $('.save[string_key=' + key + ']').text("Save");
+                    if (data.status) {
+                        $('.container-string-value[string_key=' + key + '][language=#{selectedLanguage}]').show();
+                        $('.#{selectedLanguage}[string_key=' + key + ']').hide();
+                        $('.#{selectedLanguage}[string_key=' + key + ']').text(value);
+                        $('.#{selectedLanguage}[string_key=' + key + ']').show('slow');
+                        $('.not-translated[string_key=' + key + ']').hide('slow');
+                        cb(null);
+                    } else {
+                        alert(data.message);
+                        cb(data.message);
+                    }
+                }
+            });
+        }
+
+        $("#language-select").val("#{selectedLanguage}");
+
+        $('#language-select').on('change', function () {
+            location.href = "#{baseUrl}/admin/translations?language=" + this.value + '&appName=videoder_android';
+        });
+
+        $('.suggestion-input').on('input', function () {
+            if ($(this).val().length == 0) {
+                $(this).parent().find('.save').hide();
+            } else {
+                $(this).parent().find('.save').show();
+            }
+        });
+
+        $('.suggestion-input').on('keypress', function (e) {
+            if (e.which == 13) {
+                if ($(this).val().length > 0) {
+                    var key = $(this).attr('string_key');
+                    updateStringValue(key, $(this).val(), function (err) {
+                        if (err) {
+                            $('.save[string_key=' + key + ']').text("Save");
+                        } else {
+                            $('.save[string_key=' + key + ']').hide();
+                        }
+                    });
+                }
+            }
+        });
+
+        $('.save').click(function () {
+            var stringKey = $(this).attr('string_key');
+            var suggestion = $('.suggestion-input[string_key=' + stringKey + "]").val();
+            if (suggestion.length > 0) {
+                updateStringValue(stringKey, suggestion, function (err) {
+                    if (err) {
+                        $('.save[string_key=' + stringKey + ']').text("Save");
+                    } else {
+                        $('.save[string_key=' + stringKey + ']').hide();
+                    }
+                });
+            }
+        });
+
+        $('.keep').click(function () {
+            var stringKey = $(this).attr('string_key');
+            var translator = $(this).attr('translator');
+            var translatorId = $(this).attr('translatorId');
+            var suggestion = $('.suggestion[translator="' + translator + '"][string_key="' + stringKey + '"]').text();
+            if (suggestion.length > 0) {
+                keepSuggestionApi(stringKey, suggestion, translatorId, function (err, data) {
+                    if (err) {
+                        alert("Call Failure");
+                    } else {
+                        if (data.status) {
+                            $('.container-string-value[string_key=' + stringKey + '][language=#{selectedLanguage}]').show();
+                            $('.#{selectedLanguage}[string_key=' + stringKey + ']').hide();
+                            $('.#{selectedLanguage}[string_key=' + stringKey + ']').text(suggestion);
+                            $('.#{selectedLanguage}[string_key=' + stringKey + ']').show('slow');
+                            $('.not-translated[string_key=' + stringKey + ']').hide('slow');
+
+                            $('.container-suggestion[translator="' + translator + '"][string_key="' + stringKey + '"]').hide('slow');
+                            var container = $('.suggestions-container[string_key=' + stringKey + ']');
+                            if (container.children(':visible').length === 1) {
+                                container.hide('slow');
+                            }
+
+                        } else {
+                            alert(data.message);
+                        }
+                    }
+
+                });
+            }
+        });
+
+        $('.discard').click(function () {
+            var stringKey = $(this).attr('string_key');
+            var translatorId = $(this).attr('translatorId');
+            var translator = $(this).attr('translator');
+            discardSuggestionApi(stringKey, translatorId, function (err) {
+                if (err) {
+                    alert(err);
+                } else {
+                    $('.container-suggestion[translator="' + translator + '"][string_key="' + stringKey + '"]').hide('slow');
+                    var container = $('.suggestions-container[string_key=' + stringKey + ']');
+                    if (container.children(':visible').length === 1) {
+                        container.hide('slow');
+                    }
+                }
+            });
+        });
+
+        $('.delete').on('click', function () {
+            var deleteButton = this;
+            $(deleteButton).text("Deleting...");
+            var stringKey = $(deleteButton).attr('string_key');
+            if (confirm("Are you sure? This cannot be undone.")) {
+                $.post("/admin/translations/delete",
+                        {
+                            stringKey: stringKey,
+                            appName: "videoder_android"
+                        },
+                        function (data) {
+                            if (data.status) {
+                                $('.translation-item-container[string_key=' + stringKey + "]").hide('slow');
+                            } else {
+                                alert(data.message);
+                            }
+                            $(deleteButton).text("Delete");
+                        })
+                        .fail(function () {
+                            $(deleteButton).text("Delete");
+                            alert("Call Failure");
+                        });
+            }
+        });
+
+        function isTranslationItemHasTranslation(item) {
+            var notTranslatedView = $(item).find('.not-translated');
+            if (notTranslatedView.length <= 0
+                    || !notTranslatedView.is(':visible')) {
+                return true;
+            }
+            return false;
+        }
+
+        function isTranslationItemHasSuggestion(item) {
+            var suggestionsContainer = $(item).find('.suggestions-container');
+            if (suggestionsContainer && suggestionsContainer.is(':visible')) {
+                return true;
+            }
+            return false;
+        }
+
+        function showOnlySuggestedString(enable) {
+            $('.translation-item').each(function (index, item) {
+                if (!enable) {
+                    $(item).show();
+                } else {
+                    var show = isTranslationItemHasSuggestion(item);
+                    if (!show) {
+                        $(item).hide();
+                    } else {
+                        $(item).show();
+                    }
+                }
+            });
+        }
+
+        function showOnlyUntranslatedString(enable) {
+            $('.translation-item').each(function (index, item) {
+                if (!enable) {
+                    $(item).show();
+                } else {
+                    if (isTranslationItemHasTranslation(item)) {
+                        $(item).hide();
+                    } else {
+                        $(item).show();
+                    }
+                }
+            });
+        }
+
+        $('#show-suggested-strings-switch').change(function() {
+            var flag = $(this).is(":checked");
+            if (flag) {
+                $('#show-untranslated-strings-switch').prop('checked', false);
+                showOnlyUntranslatedString(false)
+            }
+            showOnlySuggestedString(flag);
+        });
+
+        $('#show-untranslated-strings-switch').change(function () {
+            var flag = $(this).is(":checked");
+            if (flag) {
+                $('#show-suggested-strings-switch').prop('checked', false);
+                showOnlySuggestedString(false)
+            }
+            showOnlyUntranslatedString(flag);
+        });
+
+        $(document).ready(function () {
+            var showOnlyUntranslatedStrings = $("#show-untranslated-strings-switch").is(":checked");
+            $('.translation-item').each(function (index, item) {
+                if (!showOnlyUntranslatedStrings) {
+                    $(item).show();
+                } else {
+                    var notTranslatedView = $(item).find('.not-translated');
+                    if (notTranslatedView.length <= 0
+                            || !notTranslatedView.is(':visible')) {
+                        $(item).hide();
+                    }
+                }
+            });
+        });
+
+        function escapeHtml(unsafe) {
+            return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "\\&quot;")
+                    .replace(/'/g, "\\&#039;");
+        }
+
+
+        $('#accept-username-button').click(function () {
+            var translatorusername = $("#accept-username").val();
+            $('#accept-username-button').text("...");
+            $.post("/admin/translations/suggestion/keep/all",
+                    {
+                        language: "#{selectedLanguage}",
+                        appName: "videoder_android",
+                        translatorUsername: translatorusername
+                    },
+                    function (data) {
+                        $('#accept-username-button').text("Go");
+                        if (data.status) {
+                            alert("Accepted all strings of " + translatorusername);
+                            location.reload();
+                        } else {
+                            alert("Failed: " + data.message);
+                        }
+                    })
+                    .fail(function () {
+                        $('#accept-username-button').text("Go");
+                        alert("Call Failure");
+                    });
+        });
+
+        $('#discard-username-button').click(function () {
+            var translatorusername = $('#discard-username').val();
+            $('#discard-username-button').text("...");
+            $.post("/admin/translations/suggestion/discard/all",
+                    {
+                        language: "#{selectedLanguage}",
+                        appName: "videoder_android",
+                        translatorUsername: translatorusername
+                    },
+                    function (data) {
+                        $('#discard-username-button').text("Go");
+                        if (data.status) {
+                            $('.container-suggestion[translator="' + translatorusername + '"]').hide('slow');
+                            $('.suggestions-container').each(function (i) {
+                                if ($(this).children(':visible').length === 1) {
+                                    $(this).hide('slow');
+                                }
+                            });
+                            alert("Deleted all strings of " + translatorusername);
+
+                        } else {
+                            alert("Failed: " + data.message);
+                        }
+                    })
+                    .fail(function () {
+                        $('#discard-username-button').text("Go");
+                        alert("Call Failure");
+                    });
+        });
+
+        $('#download-strings').click(function(){
+            var data = '<?xml version="1.0" encoding="utf-8"?>\n<resources>\n';
+            $('.translation-item').each(function (index, item) {
+                var translationItem = $(item);
+                var translatedItem;
+                if ("#{selectedLanguage}" == 'en') {
+                    translatedItem = translationItem.find('.value-text');
+                } else {
+                    translatedItem = translationItem.find('.translated-text');
+                }
+
+                if (translatedItem.length > 0) {
+                    var stringKey = translatedItem.attr('string_key');
+                    if (stringKey.length > 0) {
+                        var stringValue = translatedItem.text();
+                        if (stringValue.length > 0) {
+                            data += '<string name="' + stringKey + '">' + escapeHtml(stringValue) + '</string>\n';
+                        }
+                    }
+                }
+            });
+            data += "</resources>"
+            var link = document.createElement("a");
+            link.download = "#{selectedLanguage}" + '.xml';
+            link.href = "data:text/plain;charset=UTF-8," + encodeURIComponent(data);
+            link.click();
+        });

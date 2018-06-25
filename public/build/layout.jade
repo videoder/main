@@ -1,0 +1,479 @@
+mixin bottom
+    .bottom-house
+        .app-feature-title= t('home.important_links')
+        .link-text#how-to-phone= '• '+t('home.how_to_install_on_phone')
+        .link-text#how-to-pc= '• '+t('home.how_to_install_on_pc')
+        .link-text#faq= '• '+t('home.frequently_asked_questions')
+        .link-text#contact-us= '• '+t('home.contact_us')
+        .link-text#about-us= '• '+t('home.about_us')
+        .link-text#privacy= '• '+t('home.privacy')
+        .link-text#terms= '• '+t('home.terms')
+        .feature-separator(style='margin-top: 20px; margin-bottom: 30px;')
+        .end-text © VIDEODER 2016
+        ._11px
+        .end-text#made= t('home.made_with',{PLACEHOLDER: '♥'})
+        ._22px
+
+mixin how-to-install-on-phone
+    -var download_file_name = 'videoder_version_11.apk'
+
+    .instructions-house
+        .instructions-title= t('download.how_to_install')
+        .black_separator
+        .instruction-item-house
+            i.material-icons.tick-icon check_circle
+            .instruction-item-text= t("download.install_instructions.a",{PLACEHOLDER: download_file_name})
+            img.instruction-image(src="/images/install/a.jpg" , alt="Download Latest Videoder apk on you smartphone")
+        .instruction-item-house
+            i.material-icons.tick-icon check_circle
+            .instruction-item-text= t("download.install_instructions.b",{PLACEHOLDER: download_file_name})
+            img.instruction-image(src="/images/install/b.jpg" , alt="Wait for the download to get completed on your smartphone")
+        .instruction-item-house
+            i.material-icons.tick-icon check_circle
+            .instruction-item-text= t("download.install_instructions.c")
+            img.instruction-image(src="/images/install/c.jpg" , alt="You are downloading from the official website so confidently turn on install from unknown sources")
+        .instruction-item-house
+            i.material-icons.tick-icon check_circle
+            .instruction-item-text= t("download.install_instructions.d")
+            img.instruction-image.wide(src="/images/install/d.jpg" , alt="After turning on click on install videoder video downloader")
+            .why(data-toggle="modal", data-target="#why-dialog")= t('download.why_i_have_to')
+        .instruction-item-house
+            i.material-icons.tick-icon check_circle
+            .instruction-item-text= t("download.install_instructions.e",{PLACEHOLDER: download_file_name})
+            img.instruction-image.wide(src="/images/install/e.jpg" , alt="After installation completes start downloading unlimited music and videos from youtube and other sites for free")
+        .instruction-item-house
+            .instruction-item-text.last= t("download.install_instructions.f")
+                a.download-restart(href="mailto:support@videoder.com") support@videoder.com
+
+
+mixin how-to-install-on-pc
+    -var download_file_name = 'videoder_version_11.apk'
+
+    .instructions-house
+        .instructions-title= t('pc.how_to_install')
+        .black_separator
+        .social-house
+            .g-plusone.center-social(data-size="tall" data-annotation="bubble" data-href="https://www.videoder.net")
+            ._15px
+            .fb-like.center-social(data-href="https://www.facebook.com/videoder" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true")
+        .how-to-subtitle= t('pc.message')
+
+        .instruction-item-house
+            i.material-icons.tick-icon check_circle
+            .instruction-item-text= t("pc.instructions.a")
+            .why#download-bluestacks= t('pc.download_bluestacks_now')
+        .instruction-item-house
+            i.material-icons.tick-icon check_circle
+            .instruction-item-text= t("pc.instructions.b")
+            .why#download-videoder-now= t('pc.download_videoder_now')
+        .instruction-item-house
+            i.material-icons.tick-icon check_circle
+            .instruction-item-text= t("pc.instructions.c")
+            .why#contact-us-pc=t('home.contact_us').toUpperCase()
+
+
+mixin faq
+
+    .instructions-house
+        .instructions-title= t('faq.title')
+        .black_separator
+        .social-house
+            .g-plusone.center-social(data-size="tall" data-annotation="bubble" data-href="https://www.videoder.net")
+            ._15px
+            .fb-like.center-social(data-href="https://www.facebook.com/videoder" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true")
+        .instruction-item-house
+            i.material-icons.tick-icon label
+            .faq-question= t('faq.questions.a.q')
+            .faq-answer= t('faq.questions.a.a')
+        .instruction-item-house
+            i.material-icons.tick-icon label
+            .faq-question= t('faq.questions.b.q')
+            .faq-answer= t('faq.questions.b.a')
+            .why#faq_uptodown UpToDown
+            .why#faq_9apps 9apps
+            .why#faq_portal Portal Programas
+        .instruction-item-house
+            i.material-icons.tick-icon label
+            .faq-question= t('faq.questions.c.q')
+            .faq-answer= t('faq.questions.c.a')
+        .instruction-item-house
+            i.material-icons.tick-icon label
+            .faq-question= t('faq.questions.d.q')
+            .faq-answer= t('faq.questions.d.a')
+        .instruction-item-house
+            i.material-icons.tick-icon label
+            .faq-question= t('faq.questions.e.q')
+            .faq-answer= t('faq.questions.e.a')
+            .why#contact-us-faq= t('home.contact_us')
+        .instruction-item-house
+            i.material-icons.tick-icon label
+            .faq-question= t('faq.questions.f.q')
+            .faq-answer= t('faq.questions.f.a')
+        .instruction-item-house
+            i.material-icons.tick-icon label
+            .faq-question= t('faq.questions.g.q')
+            .faq-answer= t('faq.questions.g.a')
+            .why#faq-how-to-pc= t('home.how_to_install_on_pc')
+        .instruction-item-house
+            i.material-icons.tick-icon label
+            .faq-question= t('faq.questions.h.q')
+            .faq-answer= t('faq.questions.h.a')
+        .instruction-item-house
+            i.material-icons.tick-icon label
+            .faq-question= t('faq.questions.i.q')
+            .faq-answer= t('faq.questions.i.a')
+        .instruction-item-house
+            i.material-icons.tick-icon label
+            .faq-question= t('faq.questions.j.q')
+            .faq-answer= t('faq.questions.j.a')
+
+mixin toolbar(hideLanguageSelector)
+    .toolbar-background
+        .toolbar-container
+            .toolbar.smaller
+                img.toolbar-icon.smaller#home-icon(src="/images/toolbar_icon.png" , alt="Videoder Music & Video downloader Download unlimited music and videos from youtube for free")
+                .toolbar-text.smaller#home-text
+                    span.text-extra-bold= t('home.app_name')
+                if (!hideLanguageSelector)
+                    +language-dropdown
+
+
+
+mixin language-dropdown
+    .dropdown.language-name
+        a(data-toggle="dropdown")= t('home.language-name')
+          span
+            i.material-icons.language-caret keyboard_arrow_down
+        ul.dropdown-menu.scrollable-menu.pull-right
+            -var languages = ["English,en","हिन्दी,hi","Español,es","中文,zh","کوردى,fa","العربية,ar","Francais,fr","Deutsch,de","Indonesian,id","Nederlands,nl","Portuguese,pt","ภาษาไทย,th","Türkçe,tr","HUNGARIAN,hu","РУССКИЙ,ru","MALAY,ms","ΕΛΛΗΝΙΚΑ,el","МОНГОЛ,mn","УКРАЇНСЬКА,uk","עברית,iw","ČEŠTINA,cs","Swahili,sw","বাঙ্গালী,bn","Romanian,ro","HRVATSKI,hr","FILIPINO,fil","Polski,pl","ગુજરાતી,gu","italiano,it","മലയാളം,ml","मराठी,mr"];
+            -each language in languages
+                li
+                    a.language-item(href="?setLng="+language.split(',')[1])= language.split(',')[0]
+
+
+mixin download-bottom-button
+    .download_now_bottom_house
+        .download-button-bottom(href="#")
+            img(src="/images/icons/partners/2.png" width="18px" alt="Uptodown.com" style="margin-right:10px;margin-bottom:2px")
+            = t('home.download_now')
+
+mixin why-dialog
+    .modal.fade#why-dialog(tabindex="-1")
+        .modal-dialog.unselectable
+            .modal-content.unselectable
+                .modal-header.dialog-why-title.unselectable
+                    .modal-title.unselectable= t('download.dialog-why-title')
+                .modal-body.unselectable
+                    .dialog-why-text.unselectable= t('download.dialog-why-text')
+                .modal-footer.dialog-why-ok(data-dismiss="modal")= t('download.ok')
+
+doctype html
+html(prefix="og: http://ogp.me/ns#" lang= i18n.lng().split("-")[0])
+    head
+        title= title
+
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        meta(charset="UTF-8")
+        meta(name="revisit-after" content="1 days")
+        meta(name="author" content="videoder")
+
+        meta(name="google-site-verification" content="LpdJfyTM0PI0YRV2S_2qeOFYhLcajelohJWswWoz0pI")
+
+        meta(property="og:site_name" content="Videoder Youtube Video & Music Downloader")
+        meta(property="fb:page_id" content="403576673071267")
+        meta(property="article:publisher" content="https://www.facebook.com/videoder")
+
+        link(rel="icon" type="image/png" href="/images/icons/favs/16.png" sizes="16x16")
+        link(rel="icon" type="image/png" href="/images/icons/favs/48.png" sizes="48x48")
+        link(rel="icon" type="image/png" href="/images/icons/favs/72.png" sizes="72x72")
+        link(rel="icon" type="image/png" href="/images/icons/favs/96.png" sizes="96x96")
+        link(rel="icon" type="image/png" href="/images/icons/favs/128.png" sizes="128x128")
+        link(rel="icon" type="image/png" href="/images/icons/favs/191.png" sizes="191x191")
+        link(rel="icon" type="image/png" href="/images/icons/favs/192.png" sizes="192x192")
+        link(rel="icon" type="image/png" href="/images/icons/favs/256.png" sizes="256x256")
+        link(rel="icon" type="image/png" href="/images/icons/favs/512.png" sizes="512x512")
+
+        - if (path)
+            - if (path == "/")
+              - path = ""
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=en" hreflang="en")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=ar" hreflang="ar")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=bn" hreflang="bn")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=cs" hreflang="cs")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=de" hreflang="de")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=el" hreflang="el")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=en" hreflang="en")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=es" hreflang="es")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=fa" hreflang="fa")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=fil" hreflang="fil")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=fr" hreflang="fr")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=gu" hreflang="gu")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=he" hreflang="he")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=hi" hreflang="hi")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=hr" hreflang="hr")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=hu" hreflang="hu")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=id" hreflang="id")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=iw" hreflang="iw")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=mn" hreflang="mn")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=ms" hreflang="ms")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=nl" hreflang="nl")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=pl" hreflang="pl")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=pt" hreflang="pt")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=ro" hreflang="ro")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=ru" hreflang="ru")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=sw" hreflang="sw")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=th" hreflang="th")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=tr" hreflang="tr")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=uk" hreflang="uk")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=zh" hreflang="zh")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=it" hreflang="it")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=ml" hreflang="ml")
+            link(rel="alternate" href="https://www.videoder.net" + path + "?setLng=mr" hreflang="mr")
+
+        link(rel="apple-touch-icon" href="apple-touch-icon.png")
+        link(rel="apple-touch-icon" sizes="57x57" href="/images/icons/favs/apple/57.png")
+        link(rel="apple-touch-icon" sizes="76x76" href="/images/icons/favs/apple/76.png")
+        link(rel="apple-touch-icon" sizes="120x120" href="/images/icons/favs/apple/120.png")
+        link(rel="apple-touch-icon" sizes="114x114" href="/images/icons/favs/apple/114.png")
+        link(rel="apple-touch-icon" sizes="152x152" href="/images/icons/favs/apple/152.png")
+        link(rel="apple-touch-icon" sizes="144x144" href="/images/icons/favs/apple/144.png")
+        link(rel="apple-touch-icon" sizes="167x167" href="/images/icons/favs/apple/167.png")
+        link(rel="apple-touch-icon" sizes="180x180" href="/images/icons/favs/apple/180.png")
+
+        link(rel="shortcut icon" href="/images/icons/favs/favicon.ico")
+
+        <link rel="stylesheet" href="../build/css/index.min.css" defer async>
+
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js' async defer)
+        script(src="https://apis.google.com/js/platform.js" async defer)
+
+        script.
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                            (i[r].q = i[r].q || []).push(arguments)
+                        }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+            ga('create', 'UA-71296264-1', 'auto');
+            ga('send', 'pageview');
+
+
+        block extrahead
+
+
+    body
+        #fb-root
+        script.
+            (function (d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.5&appId=510059505671975";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+
+            function handleKeyPress(e) {
+                var key = e.keyCode || e.which;
+                if (key == 13) {
+                    location.href = "/results?search_query=" + document.getElementById('searchinput').value;
+                }
+            }
+
+        block content
+
+        script.
+            $(".download-button-bottom, .download-button").click(function () {
+                var url = "http://videoder.en.uptodown.com/android/download";
+
+                var hl = "#{i18n.lng().split("-")[0]}";
+                console.log(hl);
+                if (hl) {
+                    ga('send', 'event', 'Download', "Uptodown", hl);
+                } else {
+                    ga('send', 'event', 'Download', "Uptodown");
+                }
+                if (hl) {
+                    if (hl === 'es') {
+                        url = "http://videoder.uptodown.com/android/download";
+                    } else if (hl === 'hi') {
+                        url = "http://videoder.in.uptodown.com/android/download";
+                    } else if (hl === 'pt') {
+                        url = "http://videoder.br.uptodown.com/android/download";
+                    } else if (hl === 'de') {
+                        url = "http://videoder.de.uptodown.com/android/download";
+                    } else if (hl === 'fr') {
+                        url = "http://videoder.fr.uptodown.com/android/download";
+                    } else if (hl === 'zh') {
+                        url = "http://videoder.cn.uptodown.com/android/download";
+                    } else if (hl === 'id') {
+                        url = "http://videoder.id.uptodown.com/android/download";
+                    } else if (hl === 'tr') {
+                        url = "http://videoder.tr.uptodown.com/android/download";
+                    }
+                }
+                location.href = url;
+            });
+
+            $(".uptodown-button").click(function(){
+                ga('send', 'event', 'Download', "Uptodown");
+                location.href = "http://videoder.en.uptodown.com/android";
+            });
+
+            $("#androidpit-review").click(function () {
+                location.href = "https://www.androidpit.com/best-android-apk";
+            });
+            $("#uptodown-review").click(function () {
+                location.href = "http://videoder.en.uptodown.com/android";
+            });
+            $("#how-to-pc").click(function () {
+                location.href = "/how-to-install-videoder-on-pc";
+            });
+
+            $("#how-to-phone").click(function () {
+                location.href = "/how-to-install-videoder-on-phone";
+            });
+
+            $("#faq").click(function () {
+                location.href = "/faq";
+            });
+
+            $("#about-us").click(function () {
+                location.href = "/about-us";
+            });
+            $("#home-icon,#home-text").click(function () {
+                location.href = "/";
+            });
+
+            $("#contact-us").click(function () {
+                location.href = "/contact-us";
+            });
+            $("#privacy").click(function () {
+                location.href = "/privacy";
+            });
+            $("#terms").click(function () {
+                location.href = "/terms";
+            });
+            $("#contact-us-pc").click(function () {
+                location.href = "/contact-us";
+            });
+            $("#contact-us-faq").click(function () {
+                location.href = "/contact-us";
+            });
+
+            $("#made").click(function () {
+                location.href = "/about-us";
+            });
+            $(".suggestion-item,.suggestion-item-search,.suggestion-item-view-all").click(function () {
+                var $this = $(this);
+                location.href = "/watch?v="+$this.attr("videoId");
+            });
+            $(".partner-store-item").click(function () {
+                var $this = $(this);
+                location.href =  "http://"+$this.attr("link_url");
+            });
+
+            $(".suggestion-row-view-all").click(function () {
+                var $this = $(this);
+                location.href = "/trending?id="+$this.attr("cat_id")+"&title="+$this.attr("cat_title");
+            });
+
+            $("#download-bluestacks").click(function () {
+                location.href = "http://www.bluestacks.com/";
+            });
+            $("#download-videoder-now").click(function () {
+                ga('send', 'event', "Download", "Direct");
+                location.href = "/download";
+            });
+            $("#faq_uptodown").click(function () {
+                ga('send', 'event', "Download", "Uptodown");
+                location.href = "http://videoder.en.uptodown.com/android";
+            });
+            $("#faq_portal").click(function () {
+                location.href = "http://www.portalprogramas.com/videoder/android/";
+            });
+            $("#faq-how-to-pc").click(function () {
+                location.href = "/how-to-install-videoder-on-pc";
+            });
+            $("#contact-mail-support").click(function () {
+                location.href = "mailto:support@videoder.com";
+            });
+            $("#contact-mail-business").click(function () {
+                location.href = "mailto:contact@videoder.com";
+            });
+            $("#contact-facebook").click(function () {
+                location.href = "http://www.facebook.com/videoder";
+            });
+            $("#contact-twitter").click(function () {
+                location.href = "http://www.twitter.com/videoderandroid";
+            });
+            $("#contact-phone").click(function () {
+                location.href = "tel:+918591647332";
+            });
+
+            $("#about-rahul").click(function () {
+                location.href = "https://www.facebook.com/rahulverma199121";
+            });
+
+            $('#about-varun').click(function(){
+                location.href = "https://twitter.com/varunest";
+            });
+
+            $("#about-sur").click(function () {
+                location.href = "https://www.facebook.com/sur.singla.9";
+            });
+
+
+
+            //donations
+
+            function onCurrencySelected(identifier){
+                var abbrv = $(identifier).data('abbrv');
+                var code = $(identifier).data('code');
+                var selector = $(selected_curreny);
+                selector.text(abbrv);
+                selector.data("abbrv",abbrv);
+                selector.data("code",code);
+            }
+
+            function onDonateClicked(){
+                $('#donation_amount_error').hide()
+                var selector = $(selected_curreny);
+                var amountInput = $('#donation_amount_input');
+                var countryCode = selector.data('code');
+                var amount = +(amountInput.val().split(' ').join(""));
+                if(amount===0||!amount){
+                    $('#donation_amount_error').show()
+                    amountInput.set(false);
+                }else{
+                    var urlString = "https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=contact@videoder.com&item_name=Donation+for+Videoder&item_number=1&return=https://www.videoder.net&no_note=1&tax=0&no_shipping=1&currency_code=" + countryCode + "&amount=" + amount;
+                    var parts = urlString.split('?');
+                    var url = parts[0];
+                    var params = parts[1].split('&');
+                    var pp, inputs = '';
+                    for(var i = 0, n = params.length; i < n; i++) {
+                        pp = params[i].split('=');
+                        inputs += '<input type="hidden" name="' + pp[0] + '" value="' + pp[1] + '" />';
+                    }
+                    $("body").append('<form action="'+url+'" method="post" id="poster">'+inputs+'</form>');
+                    $("#poster").submit();
+                }
+
+            }
+
+
+            $("#donate_button").click(function () {
+                onDonateClicked();
+            });
+
+            $("#google_play_donate_button").click(function () {
+                location.href = "https://play.google.com/store/apps/details?id=com.flatlad.subtle.wallpaper";
+            });
+

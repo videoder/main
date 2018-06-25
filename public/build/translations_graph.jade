@@ -1,0 +1,96 @@
+// Created by varun on 28/07/16.
+extends tools_base
+
+block head
+    <!-- Plotly.js -->
+    script(src="https://cdn.plot.ly/plotly-latest.min.js")
+
+block body
+    +toolbar
+    .container(style="background-color:#fff;width=100%;display:block;")
+        .loader(style="margin:auto;margin-top:400px")
+        #graph(style="width: 900px; height: 4000px; padding-left: 25px;padding-right:25px;margin:auto;")
+
+    script.
+        $(document).ready(function () {
+            $.get("/admin/translations/info",
+                    function (data) {
+                        if (data.status) {
+                            $('.loader').hide();
+                            // Extracting data
+                            var totalStrings = data.response.totalStrings;
+                            var totalLanguages = data.response.totalLanguages;
+                            var translationInfos = data.response.translationInfos;
+
+                            console.log(translationInfos);
+
+                            var layout = {
+                                title: 'Total Strings : ' + totalStrings + ' & Total Languages : ' + totalLanguages,
+                                barmode: 'stack',
+                                annotations: []
+                            };
+
+                            var traceTranslatedStrings = {};
+                            traceTranslatedStrings.x = [];
+                            traceTranslatedStrings.y = [];
+                            traceTranslatedStrings.name = "Translated Strings";
+                            traceTranslatedStrings.orientation = "h";
+                            traceTranslatedStrings.type = "bar";
+                            traceTranslatedStrings.marker = {
+                                color: '#33691E',
+                                width: 1
+                            }
+
+                            var traceTranslatedSuggestions = {};
+                            traceTranslatedSuggestions.x = [];
+                            traceTranslatedSuggestions.y = [];
+                            traceTranslatedSuggestions.name = "Suggestions for Translated Strings";
+                            traceTranslatedSuggestions.orientation = "h";
+                            traceTranslatedSuggestions.type = "bar";
+                            traceTranslatedSuggestions.marker = {
+                                color: '#689F38',
+                                width: 1
+                            }
+
+                            var traceUntranslatedSuggestions = {};
+                            traceUntranslatedSuggestions.x = [];
+                            traceUntranslatedSuggestions.y = [];
+                            traceUntranslatedSuggestions.text = [];
+                            traceUntranslatedSuggestions.name = "Suggestions for Untranslated Strings";
+                            traceUntranslatedSuggestions.orientation = "h";
+                            traceUntranslatedSuggestions.type = "bar";
+                            traceUntranslatedSuggestions.marker = {
+                                color: '#E64A19',
+                                width: 1
+                            }
+
+
+                            for (var i = translationInfos.length - 1; i >= 0; i--) {
+                                if (translationInfos[i].languageCode === "en") {
+                                    continue;
+                                }
+
+                                traceTranslatedStrings.x.push(((translationInfos[i].translatedStrings - translationInfos[i].suggestionsForTranslatedStrings) / totalStrings) * 100);
+                                traceTranslatedStrings.y.push(translationInfos[i].languageName);
+                                traceTranslatedStrings.text = translationInfos[i].translatedStrings;
+
+                                traceUntranslatedSuggestions.x.push((translationInfos[i].suggestionsForUntranslatedStrings / totalStrings) * 100);
+                                traceUntranslatedSuggestions.y.push(translationInfos[i].languageName);
+                                traceUntranslatedSuggestions.text = translationInfos[i].suggestionsForUntranslatedStrings;
+
+                                traceTranslatedSuggestions.x.push((translationInfos[i].suggestionsForTranslatedStrings / totalStrings) * 100);
+                                traceTranslatedSuggestions.y.push(translationInfos[i].languageName);
+                                traceTranslatedSuggestions.text = translationInfos[i].suggestionsForTranslatedStrings;
+                            }
+
+                            data = [traceTranslatedStrings, traceTranslatedSuggestions, traceUntranslatedSuggestions];
+
+                            Plotly.newPlot('graph', data, layout, {displayModeBar: false});
+                        } else {
+                            alert(data.message);
+                        }
+                    })
+                    .fail(function () {
+                        alert("Something Went Wrong. Try again later");
+                    });
+        });

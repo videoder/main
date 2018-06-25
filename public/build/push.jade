@@ -1,0 +1,79 @@
+extends push_base
+
+mixin input-field(input)
+  .form-group.label-floating(id=input.parent_id style="margin-left:10px;margin-right:10px")
+    label.control-label(for = input.id)= input.label
+    input.form-control(id = input.id)
+
+mixin radio-button(type)
+  label(style="margin-left:10px; margin-right:10px")= type.name
+    input(type="radio" name=type.group_name id=type.id value=type.value checked=type.checked)
+
+mixin selector(param)
+  .form-group(style="padding-top:2px")
+    label(style="margin-left:30px;margin-top:1px")= param.title
+    select.form-control(id=param.id style="margin-left:30px;margin-right:20px;max-width:250px;")
+      each val in param.items
+        option= val.title
+
+mixin switch(param)
+  .togglebutton(id=param.parent_id style="margin-left:10px; margin-top:25px")
+    label= param.tag
+        if (param.checked)
+            input(type="checkbox" id=param.id name=param.name checked style="margin-left:100px")
+        else
+            input(type="checkbox" id=param.id name=param.name unchecked style="margin-left:100px")
+
+
+block content
+  .container-fluid.main
+      form.form-horizontal.well
+        fieldset
+
+          legend Videoder Push Notification Sender
+
+          label.text-primary(style="margin-left:10px;margin-top:10px") Push Type
+          .radio(id="push_type_group")
+            +radio-button({name:"Video",id:"video_radio",value:"Video",checked:true,group_name:"push_type_group"})
+            +radio-button({name:"Playlist",id:"playlist_radio",value:"Playlist",checked:false,group_name:"push_type_group"})
+            +radio-button({name:"User",id:"user_radio",value:"User",checked:false,group_name:"push_type_group"})
+            +radio-button({name:"Channel",id:"channel_radio",value:"Channel",checked:false,group_name:"push_type_group"})
+
+          +input-field({id:"id_input",parent_id:"id",label:"IDENTIFIER",hint:"Enter Youtube video/playlist/user/channel id",description:""})
+
+          label.text-primary(style="margin-left:10px;margin-top:40px") Minimized Push items
+          +input-field({id:"min_title_input",parent_id:"min_title",label:"TITLE MINIMIZED",hint:"Enter Notification Title",description:"Titles are single lined so try to keep them short"})
+          +input-field({id:"min_sub_title_input",parent_id:"min_sub_title",label:"SUB TITLE MINIMIZED",hint:"Enter Notification Sub Title",description:"Titles are displayed in maximum 2 lines"})
+
+          label.text-primary(style="margin-left:10px;margin-top:40px") Maximized Push items
+          +input-field({id:"max_title_input",parent_id:"max_title",label:"TITLE MAXIMIZED",hint:"Enter Notification Title",description:"Titles are single lined so try to keep them short"})
+          +input-field({id:"max_title_major_input",parent_id:"max_title_major",label:"TITLE MAXIMIZED MAJOR",hint:"Enter Notification Sub Title",description:"Titles are displayed in maximum 2 lines"})
+          +input-field({id:"max_sub_title_input",parent_id:"max_sub_title",label:"SUBTITLE MAXIMIZED",hint:"Enter Notification Title",description:"Titles are single lined so try to keep them short"})
+          +input-field({id:"max_sub_title_minor_input",parent_id:"max_sub_title_minor",label:"SUBTITLE MAXIMIZED MINOR",hint:"Enter Notification Sub Title",description:"Titles are displayed in maximum 2 lines"})
+
+          label.text-primary(style="margin-left:10px;margin-top:28px") Notification Thumbs
+          .radio(id="thumb_type_group")
+            +radio-button({name:"Auto Detect Thumbs",id:"auto_detect_thumbs",value:"Auto Detect Thumbs",checked:true,group_name:"thumb_type_group"})
+            +radio-button({name:"Enter Thumb Links Manually",id:"enter_thumb_links_manually",value:"Enter Thumb Links Manually",checked:false,group_name:"thumb_type_group"})
+
+          .div(id="image_links_house")
+            +input-field({id:"dp_link_input",parent_id:"dp_link",label:"THUMBNAIL ICON LINK",hint:"",description:""})
+            +input-field({id:"expanded_link_input",parent_id:"expanded_link",label:"EXPANDED IMAGE LINK",hint:"",description:""})
+
+          label.text-primary(style="margin-left:10px;margin-top:30px") Target
+
+          .div(id="filters_house")
+            +selector(countries)
+            +selector(languageItems)
+
+          label.text-primary(style="margin-left:10px;margin-top:30px") Schedule
+          +switch({name: "schedule",tag: "Enable", id: "schedule_switch", parent_id: "schedule_container", checked: false})
+          .form-body(id="date_time_picker_container" style="margin-left:25px;margin-right:25px;max-width:225px;")
+            input.form-control(id="date_time_picker" type="datetime-local" name="schedule_time" step=1)
+
+          label.text-primary(style="margin-left:10px;margin-top:25px") Push Mode
+          .radio(id="mode_group")
+              +radio-button({name: "Test", id: "test_radio", value: "Test", checked: true, group_name: "mode_group"})
+              +radio-button({name: "Real", id: "real_radio", value: "Real", checked: false, group_name: "mode_group"})
+
+          a.btn.btn-raised.btn-primary(id="send_push" href="javascript:void(0)" style="margin-top:25px;float:right") Send Test Push

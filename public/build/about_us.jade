@@ -1,0 +1,70 @@
+extends layout
+
+
+block extrahead
+    meta(name="title" content=title)
+    meta(name="description" content=t('home.description'))
+    meta(name="keywords" content=t('home.meta_keywords'))
+
+    meta(property="og:title" content=title)
+    meta(property="og:url" content="https://www.videoder.net")
+    meta(property="og:type" content="website")
+    meta(name="og:description" content= t('home.description'))
+
+    meta(name="twitter:card" content="summary")
+    meta(name="twitter:image" content="https://www.videoder.net/images/toolbar_icon.png")
+    meta(name="twitter:image:alt" content="Videoder Icon")
+    meta(name="twitter:site" content="@videoderandroid")
+    meta(name="twitter:siteLid" content="@videoderandroid")
+    meta(name="twitter:creator" content="@videoderandroid")
+    meta(name="twitter:title" content=title)
+    meta(name="twitter:description" content=t('home.description'))
+
+    meta(name="robots" content="index,follow")
+
+block content
+    .container-fluid.how-to-page-house
+        ._55px
+
+        .instructions-house
+            .about-section-title= t('about.dev_by')
+            .contact-item-house#about-rahul
+                img.about-dp(src="/images/about/rahul.png")
+                .about-text Rahul Verma
+            .contact-item-house#about-varun
+                img.about-dp(src="/images/about/varun.png")
+                .about-text Varun Verma
+            ._22px
+            .about-section-title= t('about.managed_by')
+            .contact-item-house#about-sur
+                img.about-dp(src="/images/about/sur.png")
+                .about-text Surbhi Singla
+
+        .social-house
+            .g-plusone.center-social(data-size="tall" data-annotation="bubble" data-href="http://www.videoder.net")
+            ._15px
+            .fb-like.center-social(data-href="https://www.facebook.com/videoder" data-layout="button_count" data-action="like" data-show-faces="true" data-share="true")
+
+        +bottom
+        ._55px.blue
+
+        +toolbar
+        +download-bottom-button
+
+        script.
+            $(function () {
+                var title;
+                $(".download_now_bottom_house").addClass('gone');
+                $(".toolbar").addClass('smaller');
+                $(".toolbar-text").addClass('smaller');
+                $(".text-bold").text('');
+                $(".toolbar-icon").addClass('smaller');
+                $(".language-name").addClass('visible');
+            });
+
+
+
+
+
+
+

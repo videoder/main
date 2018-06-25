@@ -1,0 +1,85 @@
+extends config_base
+
+mixin input-field(input)
+    .form-group.label-floating(id=input.parent_id style="margin-left:10px;margin-right:10px")
+        label.control-label(for = input.id)= input.label
+        input.form-control(id = input.id value=input.value type=input.type min=1 max=100)
+
+mixin whatsnew-input-field(input)
+     .form-group.label-placeholder(style="margin-left:30px" id=input.parent_id)
+         input.form-control(type="text" id=input.id value=input.value )
+
+mixin radio-button(type)
+    label(style="margin-left:10px; margin-right:10px")= type.name
+        input(type="radio" name=type.group_name id=type.id value=type.value checked=type.checked)
+
+mixin selector(param)
+    .form-group
+        label(style="margin-left:30px;margin-top:10px")= param.title
+        select.form-control(id=param.id style="margin-left:30px;margin-right:20px;max-width:250px;")
+            each val in param.items
+                option= val.title
+
+mixin switch(param)
+    .togglebutton(id=param.parent_id style="margin-left:10px; margin-top:25px")
+        label= param.tag
+            if (param.checked)
+                input(type="checkbox" id=param.id name=param.name checked style="margin-left:100px")
+            else
+                input(type="checkbox" id=param.id name=param.name unchecked style="margin-left:100px")
+
+block content
+
+    .container-fluid.main
+
+        form.form-horizontal.well(style="padding: 50px 50px 30px 50px;")
+            fieldset
+                h1 Videoder Configuration Manager
+
+                h3.text-primary(id="signature-title" style="margin-top:50px") Signature
+                +input-field({id:"signature",parent_id:"signature_container",label:"",value: data_file.signature})
+
+                h3.text-primary(style="margin-top:25px") Latest App Config
+                +switch({name: "latest_app_switch", tag: "Enable", id: "latest_app_switch", parent_id: "latest_app_switch_container", checked: data_file.update_data.enabled})
+                +input-field({id:"version_int",parent_id:"version_int_container",label:"Version ID",value: data_file.update_data.latest_version_int, type:"number"})
+                +input-field({id:"version_name",parent_id:"version_name_container",label:"Version Name",value:data_file.update_data.latest_version_name, type:"text"})
+                +input-field({id:"apk_link",parent_id:"apk_link_container",label:"Update Link",value:data_file.update_data.update_link, type:"text"})
+
+                h4(style="margin-left:10px") What's New
+                    a.btn.btn-raised.btn-xs.btn-primary(id="add-whats-new" href="javascript:void(0)" style="margin-left:25px") Add
+                    a.btn.btn-raised.btn-xs.btn-danger(id="remove-whats-new" href="javascript:void(0)" style="margin-left:25px") Remove
+                    div(id="whats-new-container")
+                        -var i = 0
+                        each val in data_file.update_data.whats_new
+                            - i++
+                            +whatsnew-input-field({id:i +"-point", parent_id:i +"-point-container", value: val})
+
+                h3.text-primary(style="margin-top:25px") Learn Info
+                +switch({name: "learn_info_switch",tag: "Enable", id: "learn_info_switch", parent_id: "learn_info_switch_container", checked: data_file.learn_info.enabled})
+                +switch({name: "learn_info_show_switch",tag: "Show", id: "learn_info_show_switch", parent_id: "learn_info_show_switch_container", checked: data_file.learn_info.show})
+                +input-field({id: "learn_info_identifier", parent_id:"learn_info_identifier_container", label: "Identifier", hint: "Enter Youtube video id", value: data_file.learn_info.v_id, type:"text"})
+
+                h3.text-primary(style="margin-top:25px") Others
+
+                .form-group(style="margin-left:10px")
+                    label(for="s1") Selected Ad Type
+                    select.form-control(id="adtype-select")
+                        option(value=0) None
+                        option(value=1) Admob
+                        option(value=2) InMobi
+                        option(value=3) Mobup
+
+                +input-field({id: "username", parent_id:"username_container", label: "Username", hint: "Enter Username", value: "", type:"text"})
+                +input-field({id: "password", parent_id:"password_container", label: "Password", hint: "Enter Password", value: "", type:"password"})
+
+
+                a.btn.btn-raised.btn-primary(id="update-config" href="javascript:void(0)" style="margin: 25px auto;float:right") Update Config
+
+
+
+
+
+
+
+
+

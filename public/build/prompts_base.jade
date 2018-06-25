@@ -1,0 +1,63 @@
+// @author varun on 20/06/16.
+doctype html
+html
+    head
+        title= title
+
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        meta(name="robots" content="noindex,nofollow")
+
+        link(rel='stylesheet', href='/css/form_style.css')
+
+        link(rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css")
+        link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
+
+        <!-- Bootstrap -->
+        link(rel="stylesheet", type="text/css", href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+
+        <!-- Bootstrap Material Design -->
+        link(rel="stylesheet", type="text/css", href="/dist/css/bootstrap-material-design.css")
+        link(rel="stylesheet", type="text/css", href="/dist/css/ripples.min.css")
+
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+
+
+    body(style="width:100%")
+        block content
+        script(src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js")
+        script(src="/dist/js/material.js")
+        script(src="/dist/js/ripples.min.js")
+        script.
+            var ajaxRunning = false;
+            $(document).ready(function () {
+                $.material.init();
+            });
+
+            $(".remove-prompt").click(function () {
+                var index = $(this).parent().parent().parent().children().index($(this).parent().parent());
+                var promptName = $(this).parent().parent().find('h4').text();
+                if (!ajaxRunning) {
+                    ajaxRunning = true;
+                    $.post("#{apiEndPoint}admin/prompt/remove?name=" + promptName + "&username=#{username}&password=#{password}",
+                            function (data) {
+                                if (data.status) {
+                                    $(".prompts-container").children().eq(index).remove();
+                                }
+                                ajaxRunning = false;
+                                alert(data.message);
+                            })
+                            .fail(function () {
+                                ajaxRunning = false;
+                                alert("Call Failure");
+                            });
+                }
+            });
+
+            $(".edit-prompt").click(function () {
+                var promptName = $(this).parent().parent().find('h4').text();
+                window.location.href = "#{website_link}/admin/prompt/edit?name=" + promptName;
+            });
+
+            $("#create-prompt").click(function () {
+                window.location.href = '#{website_link}/admin/prompt/create'
+            });

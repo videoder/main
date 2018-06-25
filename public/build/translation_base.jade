@@ -1,0 +1,81 @@
+// Created by varun on 28/07/16.
+extends tools_base
+
+mixin input-field(input, password)
+    - if(password)
+        .form-group.label-floating(id=input.parent_id style="margin-left:10px;margin-right:10px;max-width:300px")
+            label.control-label(for = input.id)= input.label
+            input.form-control(id = input.id type="password")
+    - else
+        .form-group.label-floating(id=input.parent_id style="margin-left:10px;margin-right:10px;max-width:300px")
+            label.control-label(for = input.id)= input.label
+            input.form-control(id = input.id type="text")
+
+mixin language-selector(languages)
+    .form-group(style="margin-left:10px")
+        label(for="s1") Select Language
+        - console.log(languages);
+        select.form-control(id="language-select")
+            -for(var i = 0; i<languages.length; i++)
+                option(value=languages[i].code)= languages[i].name
+
+mixin suggestionRow(data, admin)
+        - if (admin)
+            - if (data.suggestions)
+                .suggestions-container(string_key=data.key style="padding:10px;background-color:#eee;border-radius:5px;margin-bottom:15px")
+                    - for (var i = 0; i < data.suggestions.length; i++)
+                        - if(data.suggestions[i]['language'] === selectedLanguage)
+                            div.container-suggestion(style="display:block;margin-top:16px;margin-bottom:15px" translator=data.suggestions[i].translator string_key=data.key)
+                                p(style="color:#4d4d4d;display:inline-block;margin-bottom:0px !important") <b>#{data.suggestions[i]["translatorName"]} (#{data.suggestions[i]["translator"]}): </b>
+                                    span.suggestion(translator=data.suggestions[i].translator string_key=data.key style="color:#ff9900") <i>#{data.suggestions[i]["value"]}</i>
+                                div(style="display:inline")
+                                    a.btn.btn-raised.btn-xs.btn-primary.keep(string_key=data.key translator=data.suggestions[i].translator translatorId=data.suggestions[i].translatorId href="javascript:void(0)" style="float:right;margin:0 0 10px 10px !important") Keep
+                                    a.btn.btn-raised.btn-xs.discard(string_key=data.key translator=data.suggestions[i].translator translatorId=data.suggestions[i].translatorId style="float:right;margin:0 0 10px 10px !important") Discard
+        - else
+            - if (data.suggestions)
+                - for (var i = 0; i < data.suggestions.length; i++)
+                    - if(data.suggestions[i]['language'] === selectedLanguage)
+                    p.container-suggestion(string_key=data.key style="color:#535353") <b>My Suggestion: </b>
+                        span.suggestion(string_key=data.key style="color:#ff9900")= data.suggestions[i]["value"]
+            - else
+                p.container-suggestion(string_key=data.key style="color:#535353;display:none;") <b>My Suggestion: </b>
+                    span.suggestion(string_key=data.key style="color:#ff9900")
+
+mixin translationElement(data, admin)
+    .translation-item
+        .margin-big
+        if (data.values)
+            - for (var i = 0; i < data.values.length; i++)
+                - if (data.values[i]["language"] === "en")
+                    p(style="color:#535353") <b>Value: </b>
+                        span.value-text(class='en' string_key=data.key)= data.values[i]["value"]
+
+        - if (selectedLanguage != "en")
+            - var translated = false;
+            - for (var i = 0; i < data.values.length; i++)
+                - if(data.values[i]["language"] != "en")
+                    - translated = true;
+                    p(style="color:#535353") <b>Translation: </b>
+                        span.translated-text(class=selectedLanguage string_key=data.key style="color:#009688")= data.values[i]["value"]
+
+            - if (!translated)
+                p.container-string-value(language=selectedLanguage string_key=data.key style="color:#535353;display:none") <b>Translation: </b>
+                    span.translated-text(class=selectedLanguage string_key=data.key style="color:#009688;")
+                p.not-translated(string_key=data.key style="color:#bd3e1c") <i>Not Translated Yet</i>
+            - else
+                p.not-translated(string_key=data.key style="color:#bd3e1c;display:none") <i>Not Translated Yet</i>
+
+        +suggestionRow(data, admin)
+
+        if (selectedLanguage == "en")
+            input.suggestion-input(string_key=data.key placeholder="Suggest Fix" style="width:100%")
+        else
+            input.suggestion-input(string_key=data.key placeholder="Suggest Translation" style="width:100%")
+
+        div(style="display:inline-block")
+            a.btn.btn-raised.btn-xs.btn-primary.save(string_key=data.key href="javascript:void(0)" style="margin-top:25px;float:right;display:none;") Save
+            if (admin)
+                if (selectedLanguage == "en")
+                    a.btn.btn-raised.btn-xs.btn-default.delete(string_key=data.key href="javascript:void(0)" style="margin-top:25px;float:right;margin-right:10px") Delete
+
+

@@ -1,0 +1,59 @@
+extends prompts_base
+
+mixin input-field(input)
+    .form-group.label-floating(id=input.parent_id style="margin-left:10px;margin-right:10px")
+        label.control-label(for = input.id)= input.label
+        input.form-control(id = input.id value=input.value type=input.type min=1 max=100)
+
+mixin whatsnew-input-field(input)
+    .form-group.label-placeholder(style="margin-left:30px" id=input.parent_id)
+        input.form-control(type="text" id=input.id value=input.value )
+
+mixin radio-button(type)
+    label(style="margin-left:10px; margin-right:10px")= type.name
+    input(type="radio" name=type.group_name id=type.id value=type.value checked=type.checked)
+
+mixin selector(param)
+    .form-group
+        label(style="margin-left:30px;margin-top:10px")= param.title
+        select.form-control(id=param.id style="margin-left:30px;margin-right:20px;max-width:250px;")
+            each val in param.items
+                option= val.title
+
+mixin switch(param)
+    .togglebutton(id=param.parent_id style="margin-left:10px; margin-top:25px")
+        label= param.tag
+            if (param.checked)
+                input(type="checkbox" id=param.id name=param.name checked style="margin-left:100px")
+            else
+                input(type="checkbox" id=param.id name=param.name unchecked style="margin-left:100px")
+
+block content
+    .container-fluid.main
+
+        form.form-horizontal.well(style="padding: 50px 50px 30px 50px;")
+            fieldset
+                h1(style="margin-bottom:50px") Videoder's Current Active Prompts
+
+                .prompts-container
+                    - for (var i=0; i<prompts.length; i++)
+                        .prompt-container
+                            h4.text-primary(style="margin-left: 10%;margin-top:27px;display:inline-block")= prompts[i]
+
+                            .button_container(style="float:right; margin-top:12px")
+                                a.btn.btn-raised.btn-xs.btn-default(class="edit-prompt" href="javascript:void(0)" style="margin-left:25px") Edit
+                                a.btn.btn-raised.btn-xs.btn-danger(class="remove-prompt" href="javascript:void(0)" style="margin-left:25px") Remove
+
+                a.btn.btn-raised.btn-primary(id="create-prompt" href="javascript:void(0)" style="margin-top:80px;float:right") Create Prompt
+
+
+
+
+
+
+
+
+
+
+
+

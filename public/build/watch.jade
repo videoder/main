@@ -1,0 +1,50 @@
+extends layout
+
+block extrahead
+    meta(name="title" content=title)
+    meta(name="description" content=t('general.watch_download_video', {PLACEHOLDER: video.snippet.title}))
+    meta(name="keywords" content="download #{video.snippet.title}, #{video.snippet.title}, free #{video.snippet.title} download, video download, music download, free video download, mp3 download, Videoder, videoder video downloader, videoder apk, android Youtube Downloader")
+    link(rel="image_src" href=thumb)
+
+    meta(property="og:type" content="video.other")
+    meta(property="og:title" content=title)
+    meta(property="og:image" content=thumb)
+    meta(property="og:url" content="https://www.videoder.net/watch?v=#{video.id}")
+    meta(name="og:description" content=t('general.watch_download_video', {PLACEHOLDER: video.snippet.title}))
+
+    meta(name="twitter:card" content="summary")
+    meta(name="twitter:image" content="https://www.videoder.net/images/toolbar_icon.png")
+    meta(name="twitter:image:alt" content="Videoder Icon")
+    meta(name="twitter:site" content="@videoderandroid")
+    meta(name="twitter:siteLid" content="@videoderandroid")
+    meta(name="twitter:creator" content="@videoderandroid")
+    meta(name="twitter:title" content=title)
+    meta(name="twitter:description" content=t('general.watch_download_video', {PLACEHOLDER: video.snippet.title}))
+
+    meta(name="robots" content="index,follow")
+
+block content
+    +toolbar(true)
+    ._55px
+    .container-fluid.how-to-page-house
+        ._22px
+        .video-super-house
+            .video-house.detail
+                .video-responsive
+                    iframe(width="420" height="315" src="https://www.youtube.com/embed/"+videoid+"?showinfo=0" frameborder="0" allowfullscreen)
+
+        -if(video)
+            .watch-top-house
+                .watch-title #{video.snippet.title}
+                .watch-views= Number(video.statistics.viewCount).toLocaleString() + t('home.views')
+                .watch-uploader= t('home.by') + video.snippet.channelTitle
+
+        .watch-bottom-house
+            .watch-download-des= t('watch.des')
+            .download-button.wider= t('watch.download_videoder')
+            a(href="http://videoder.en.uptodown.com/android" style="color:#756f6f;margin:auto;text-align:center;margin-top:10px;display:block" ) Official Store: Uptodown
+            #header-version= t('home.version', {PLACEHOLDER: app_version})
+
+
+        +bottom
+        ._55px.blue

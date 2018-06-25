@@ -1,0 +1,190 @@
+doctype html
+html
+    head
+        meta(name="title" content=title)
+        meta(name="description" content="How to download Instagram videos using Videoder")
+        meta(name="keywords" content="download, instagram, videos, videoder, how, to")
+        meta(property="og:title" content=title)
+        meta(property="og:image" content="https://www.videoder.net/images/og_image.jpg")
+        meta(property="og:url" content="https://www.videoder.net/how-to-download-instagram")
+        meta(property="og:type" content="website")
+        meta(name="og:description" content="How to download Instagram videos using Videoder")
+        meta(name="twitter:card" content="summary")
+        meta(name="twitter:image" content="https://www.videoder.net/images/toolbar_icon.png")
+        meta(name="twitter:image:alt" content="Videoder Icon")
+        meta(name="twitter:site" content="@videoderandroid")
+        meta(name="twitter:siteLid" content="@videoderandroid")
+        meta(name="twitter:creator" content="@videoderandroid")
+        meta(name="twitter:title" content=title)
+        meta(name="twitter:description" content="How to download Instagram videos using Videoder")
+        meta(name="robots" content="index,follow")
+        title= title
+    style.
+        body {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -o-user-select: none;
+            background-color: #ededed;
+        }
+
+        h2 {
+            color: #535353;
+        }
+
+        li {
+            color: #272727;
+            margin-top: 4px;
+        }
+
+        .card {
+            background-color: #ffffff;
+            width: 90%;
+            max-width: 400px;
+            margin-top: 25px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 16px;
+            padding-right: 16px;
+            padding-top: 5px;
+            padding-bottom: 20px;
+            box-shadow: 0px 1px 3px #b1b1b1;
+            border-radius: 2px;
+        }
+
+        .last-card {
+            margin-bottom: 100px;
+        }
+
+        .suggestion-image {
+            width: 100%;
+        }
+
+        p {
+            font-size: 16px;
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            color: #484848;
+        }
+
+        h2 {
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        a {
+            font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+            text-decoration: none;
+        }
+
+        .bottom-buttons-background {
+            position: fixed;
+            width: 100%;
+            background-color: #ffffff;
+            display: flex;
+            padding-top: 25px;
+            padding-bottom: 25px;
+            bottom: 0px;
+            left: 0px;
+            box-shadow: 0 -1px 2px rgba(55, 54, 57, 0.2);
+        }
+
+        .button-container {
+            margin: auto;
+        }
+
+        .button-app {
+            background-color: #CF286F;
+            border: #c71e6c 1px solid;
+            margin-left: 16px;
+            box-shadow: 0 3px #971458;
+
+        }
+
+        .button-web {
+            background-color: #e5e3e5;
+            border: #cac6ca 1px solid;
+            box-shadow: 0 3px #bfbdc1;
+
+        }
+
+        .button-app:active {
+            background-color: #971458;
+            box-shadow: 0 3px #971458;
+        }
+
+        .button-web:active {
+            background-color: #bfbdc1;
+            box-shadow: 0 3px #bfbdc1;
+        }
+
+        .button {
+            padding: 10px 10px;
+            border-radius: 2px;
+            font-size: 16px;
+            border: none;
+            border-radius: 3px;
+            cursor: hand;
+            cursor: pointer;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            -o-user-select: none;
+        }
+
+        .title {
+            max-width: 400px;
+            width: 95%;
+            margin: auto;
+            margin-top: 50px;
+            margin-bottom: 35px;
+        }
+
+        .top-button-container {
+            display: flex;
+            width: 100%;
+            margin-top: 40px;
+        }
+
+        @media screen and (max-width: 400px) {
+            .button {
+                padding: 8px;
+            }
+
+            a {
+                font-size: 6px;
+            }
+
+            .button-app {
+                margin-left: 10px;
+            }
+        }
+
+    body
+        .top-button-container
+            .button-container
+                a.button.button-web(href="https://www.instagram.com" style="color:#464646") Open Instagram Web
+                a.button.button-app(href="intent://instagram.com/_n/mainfeed/#Intent;package=com.instagram.android;scheme=https;end" style="color:#f8f8f8;") Open Instagram App
+
+        .title
+            img(src="/images/site_icons/instagram.png" height="50px" width="50px" style="float:left;margin-right:15px;")
+            h2 How to download Media from Instagram?
+        .card
+            p <b>1.</b> Open Instagram and go the media you want to download.
+            img(src="/images/instagram_media.jpg" class="suggestion-image")
+
+        .card
+            p <b>2.</b> Click on more options and then select <b>Copy Share URL</b> option.
+            img(src="/images/instagram_copy_url.jpg" class="suggestion-image")
+
+        .card.last-card
+            p <b>3.</b> Now you can download from option at the bottom of your screen. Enjoy :)
+            img(src="/images/instagram_download_hint.jpg" class="suggestion-image")
+
+        .bottom-buttons-background
+            .button-container
+                a.button.button-web(href="https://www.instagram.com" style="color:#464646") Open Instagram Web
+                a.button.button-app(href="intent://instagram.com/_n/mainfeed/#Intent;package=com.instagram.android;scheme=https;end" style="color:#f8f8f8;") Open Instagram App
+

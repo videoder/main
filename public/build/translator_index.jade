@@ -1,0 +1,48 @@
+extends translation_base
+
+block body
+    +toolbar
+    .container-fluid.main
+        .form-horizontal.well#input-form
+            fieldset
+                h1(style="display:block;text-align:center") Welcome
+                p.subtitle(style="text-align:center;margin-top:10px") Videoder Translation Manager
+
+                .margin-big
+                div(style="width:80%;margin:auto")
+                    +input-field({
+                        id: "username_input",
+                        parent_id: "username",
+                        label: "Email",
+                        hint: "",
+                        description: ""
+                    })
+
+                div(style="width:80%;margin:auto")
+                    +language-selector(languages)
+
+
+                .margin-big
+                a.btn.btn-raised.btn-primary(id="submit" href="javascript:void(0)" style="margin-top:25px;float:right") Submit
+
+    script.
+        function navigateToManageTranslation() {
+            var isValid = true
+            console.log('clicked');
+            var username = $('#username_input').val();
+            console.log(username);
+            if (username.length <= 0) {
+                isValid = false;
+                $('#username').addClass('has-error');
+            }
+
+            var language = $('#language-select').val();
+            console.log(language);
+            if (isValid) {
+                location.href = "#{baseUrl}/tools/translations?language=" + language + '&appName=videoder_android&username=' + username;
+            }
+        }
+
+        $('#submit').click(function () {
+            navigateToManageTranslation();
+        });

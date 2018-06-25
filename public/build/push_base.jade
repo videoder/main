@@ -1,0 +1,203 @@
+extends tools_base
+
+block body
+    +toolbar
+    block content
+    script.
+        var ajaxRunning = false;
+        $('#date_time_picker_container').hide();
+        var defaultTime = new Date(new Date() - new Date().getTimezoneOffset() * 60000 + 300000).toJSON().slice(0, 19);
+        var dateTimePicker = $("#date_time_picker").val(defaultTime);
+        dateTimePicker.prop('min', defaultTime);
+        $('#schedule_switch').on('change', function () {
+            var scheduleSwitch = $('#schedule_switch').is(":checked");
+            if (scheduleSwitch) {
+                $('#date_time_picker_container').show(230);
+            } else {
+                $('#date_time_picker_container').hide(230);
+            }
+        });
+
+        $("#enter_thumb_links_manually").click(function () {
+            $("#image_links_house").show(230);
+        });
+
+        $("#auto_detect_thumbs").click(function () {
+            $("#image_links_house").hide(230);
+        });
+
+        $("#image_links_house").hide()
+
+        $("#real_radio").click(function () {
+            $('#send_push').text('Send Push')
+        });
+
+        $("#test_radio").click(function () {
+            $('#send_push').text('Send Test Push')
+        });
+
+        $("#video_radio").change(function () {
+            $("#auto_detect_thumbs").prop('disabled', !this.checked);
+        });
+
+        $("#playlist_radio").change(function () {
+            $("#auto_detect_thumbs").prop('disabled', this.checked);
+            $("#enter_thumb_links_manually").prop('checked', this.checked);
+            if (this.checked) {
+                $("#image_links_house").show(230)
+            }
+        });
+        $("#user_radio").change(function () {
+            $("#auto_detect_thumbs").prop('disabled', this.checked);
+            $("#enter_thumb_links_manually").prop('checked', this.checked);
+            if (this.checked) {
+                $("#image_links_house").show(230)
+            }
+        });
+        $("#channel_radio").change(function () {
+            $("#auto_detect_thumbs").prop('disabled', this.checked);
+            $("#enter_thumb_links_manually").prop('checked', this.checked);
+            if (this.checked) {
+                $("#image_links_house").show(230)
+            }
+        });
+
+        $("#send_push").click(function () {
+            var isValid = true;
+            var pushType = $('#push_type_group').find('input:radio:checked').val();
+            var identifier = $('#id_input').val();
+            if (identifier.length < 11) {
+                isValid = false;
+                $('#id').addClass('has-error');
+            }
+
+            var minTitle = $('#min_title_input').val();
+            if (minTitle.length < 5) {
+                isValid = false;
+                $('#min_title').addClass('has-error');
+            }
+
+            var minSubTitle = $('#min_sub_title_input').val();
+            if (minSubTitle.length < 5) {
+                isValid = false;
+                $('#min_sub_title').addClass('has-error');
+            }
+
+            var maxTitle = $('#max_title_input').val();
+            if (maxTitle.length < 5) {
+                isValid = false;
+                $('#max_title').addClass('has-error');
+            }
+
+            var maxTitleMajor = $('#max_title_major_input').val();
+            if (maxTitle.length < 1) {
+                maxTitleMajor = null;
+            }
+
+            var maxSubTitle = $('#max_sub_title_input').val();
+            if (maxSubTitle.length < 5) {
+                isValid = false;
+                $('#max_sub_title').addClass('has-error');
+            }
+
+            var maxSubTitleMinor = $('#max_sub_title_minor_input').val();
+            if (maxSubTitleMinor.length < 1) {
+                maxSubTitleMinor = null;
+            }
+
+            var dp_link = "";
+            var expanded_link = "";
+            var thumbType = $('#thumb_type_group').find('input:radio:checked').val();
+            if (thumbType === 'Enter Thumb Links Manually') {
+                dp_link = $('#dp_link_input').val();
+                if (dp_link.length < 5) {
+                    isValid = false;
+                    $('#dp_link').addClass('has-error');
+                } else if (!dp_link.startsWith("http://") && !dp_link.startsWith("https://")) {
+                    isValid = false;
+                    $('#dp_link').addClass('has-error');
+                    alert("Thumbnail link should start with http / https");
+                }
+                expanded_link = $('#expanded_link_input').val();
+                if (expanded_link.length < 5) {
+                    isValid = false;
+                    $('#expanded_link').addClass('has-error');
+                } else if (!expanded_link.startsWith("http://") && !expanded_link.startsWith("https://")) {
+                    isValid = false;
+                    $('#expanded_link').addClass('has-error');
+                    alert("Expanded image link should start with http / https");
+                }
+            }
+
+
+            var pushMode = $('#mode_group').find('input:radio:checked').val();
+
+            var country = $('#country_selector').val();
+            var locale = $('#locale_selector').val();
+
+
+            var payload = {
+                push_type: pushType,
+                id: identifier,
+                min_title: minTitle,
+                min_sub_title: minSubTitle,
+                max_title: maxTitle,
+                max_sub_title: maxSubTitle,
+                thumb_type: thumbType,
+                dp_link: dp_link,
+                expanded_link: expanded_link,
+                push_mode: pushMode,
+                country: country,
+                locale: locale,
+            };
+            if (maxTitleMajor) {
+                payload['max_title_major'] = maxTitleMajor;
+            }
+            if (maxSubTitleMinor) {
+                payload['max_sub_title_minor'] = maxSubTitleMinor;
+            }
+
+            if ($('#schedule_switch').is(":checked")) {
+                var pushTime = new Date(new Date($("#date_time_picker").val()).getTime() + new Date().getTimezoneOffset() * 60000).toJSON();
+                if (pushTime != "" && pushTime != null) {
+                    payload['push_time'] = pushTime;
+                } else {
+                    isValid = false;
+                    alert("Invalid Time");
+                }
+            }
+
+            if (isValid && !ajaxRunning) {
+
+                var verified = false;
+                if (pushMode === 'Real') {
+                    verified = prompt("Type in REAL to confirm sending push to real audience").toUpperCase() === 'REAL';
+                } else {
+                    verified = true;
+                }
+
+                if (verified) {
+
+                    ajaxRunning = true;
+                    var oldText = $("#send_push").text();
+                    $('#send_push').text("Sending Push...");
+                    $.post("/admin/push",
+                            payload
+                            , function (data) {
+                                ajaxRunning = false;
+                                $('#send_push').text(oldText);
+                                alert(data.message);
+                            })
+                            .fail(function () {
+                                ajaxRunning = false;
+                                alert("Call Failure");
+                                $('#send_push').text(oldText);
+                            });
+                } else {
+                    alert('Verification Failed !!');
+                }
+
+            }
+
+
+        });

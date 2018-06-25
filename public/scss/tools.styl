@@ -1,0 +1,163 @@
+primary-color = #c53b34
+primary-color-light = rgba(221, 64, 61, 0.31)
+primary-color-dark = #bc3832
+button-color = #bc3832
+button-color-semi-dark = #a4312c
+button-color-dark = #972d28
+button-color-very-dark = #73221e
+flat-shadow-color = rgba(0, 0, 0, 0.15)
+
+font-weight-regular = 400
+font-weight-bold = 700
+font-weight-extra-bold = 800
+
+text-color-primary = #262628
+text-color-secondary = #5c5c60
+text-color-accent = #009688
+
+text-color-error = #f3103b
+
+body
+  width 100%
+  padding-top 100px
+  align-content center
+  align-items: center
+  display flex
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+  color text-color-secondary
+
+p
+  color text-color-secondary
+
+.subtitle
+  color #898989
+  font-size 19px
+
+legend
+  color #3a3a3a
+
+.container-fluid
+  width 100%
+
+#home-icon
+  float left
+  width 35px
+  height 35px
+  margin-left 10px
+  cursor: hand;
+  cursor: pointer;
+
+#home-text
+  font-family Open Sans, sans-serif
+  font-size 19px
+  line-height 110%
+  padding-right 10px
+  margin-left: 10px
+  display inline-block
+  margin-top: 9px;
+  cursor: hand;
+  cursor: pointer;
+  font-weight font-weight-bold
+  color #f3f0fa
+
+.toolbar-container
+  max-width: 900px;
+  margin: 0 auto;
+  height: 55px;
+  top 0;
+
+.toolbar-background
+  background-color: primary-color-dark;
+  z-index 999
+  width: 100%;
+  top 0;
+  position: fixed;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+  -webkit-transition height 0.3s
+  -moz-transition height 0.3s
+  -ms-transition height 0.3s
+  -o-transition height 0.3s
+  transition height 0.3s
+  box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.2), 0 4px 15px 0 rgba(0, 0, 0, 0.2)
+
+.toolbar
+  background-color: null;
+  align-items: center
+  padding-right 20px
+  padding-top 10px
+  padding-bottom 10px
+  height 55px
+
+.well
+  box-shadow 0 0 2px 0 rgba(0, 0, 0, 0.2) !important
+
+.form-group
+  display inline
+
+a
+  color: text-color-accent
+
+.margin-medium
+  height 20px
+
+.margin-very-small
+  height 5px
+
+.margin-small
+  height 10px
+
+.margin-big
+  height 30px
+
+.translation-item
+  background-color #f9f9f9
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 15px
+  display: inline-block
+  width 100%
+
+.form-horizontal
+  width 700px
+  margin auto
+
+.color-accent
+  color text-color-accent
+
+.color-error
+  color text-color-error
+
+.loader
+  border: 5px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 5px solid #3498db;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+
+@-webkit-keyframes spin
+  0%
+    -webkit-transform: rotate(0deg);
+
+  100%
+    -webkit-transform: rotate(360deg);
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 767px)
+  body
+    padding-right 0px
+    padding-left 0px
+
+  .form-horizontal
+    width 95%
+    margin auto

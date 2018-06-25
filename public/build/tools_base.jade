@@ -1,0 +1,50 @@
+doctype html
+
+mixin toolbar
+    .toolbar-background
+        .toolbar-container
+            .toolbar
+                img.toolbar-icon.smaller#home-icon(src="/images/toolbar_icon.png" , alt="Videoder Music & Video downloader Download unlimited music and videos from youtube for free")
+                .toolbar-text.smaller#home-text
+                    span.text-extra-bold= t('home.app_name')
+
+html
+    head
+        title= title
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        meta(name="robots" content="noindex,nofollow")
+
+        link(rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css")
+        link(href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet")
+        link(rel="stylesheet", type="text/css", href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+
+        link(rel="stylesheet", type="text/css", href="/dist/css/bootstrap-material-design.css")
+        link(rel="stylesheet", type="text/css", href="/dist/css/ripples.min.css")
+        link(async defer rel='stylesheet', href='/bootstrap/css/bootstrap-responsive.min.css')
+        link(async defer rel='stylesheet', href='/css/tools.css')
+
+        script(src='https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js' async defer)
+        script(src="/dist/js/material.js")
+        script(src="/dist/js/ripples.min.js")
+
+        block head
+
+    body
+        script.
+            $(document).ready(function () {
+                $.material.init();
+            });
+
+        block body
+
+        script.
+            $("#home-icon, #home-text").click(function () {
+                location.href = "#{baseUrl}";
+            });
+            $.ajaxSetup({
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true
+            })

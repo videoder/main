@@ -1,0 +1,64 @@
+extends create_edit_prompt_base
+
+mixin input-field(input)
+    .form-group.label-floating(id=input.parent_id style="margin-left:10px;margin-right:10px")
+        label.control-label(for = input.id)= input.label
+        input.form-control(id = input.id value=input.value type=input.type min=1 max=100)
+
+mixin textarea(param)
+    .form-group.label-floating(id=param.parent_id style="margin-left:10px; margin-right:10px;")
+        label.control-label(for="t1")=param.label
+        textarea.form-control(id=param.id)
+
+mixin localeData(param)
+    .wrapper
+        h3.text-primary(style="margin-top:25px")= param.title
+
+        .locale-data(style="margin-top:15px;border-style:solid;border-color:lightgrey; border-width: 1px;border-radius: 5px; padding-bottom:10px")
+            +input-field({id:'title-' + param.title,parent_id:"title-container-" + param.title,label:"Title",value: ""})
+            +textarea({id:"message-"+param.title,parent_id:"message-container-"+param.title,label:"Message",value: ""})
+            +input-field({id:"negative-button-" + param.title,parent_id:"negative-button-container-"+param.title,label:"Negative Button",value: ""})
+            +input-field({id: "positive-button-"+param.title, parent_id: "positive-button-container-"+param.title, label: "Positive Button", value: ""})
+
+mixin switch(param)
+    .togglebutton(id=param.parent_id style="margin-left:10px; margin-top:25px")
+        label= param.tag
+            if (param.checked)
+                input(type="checkbox" id=param.id name=param.name checked style="margin-left:100px")
+            else
+                input(type="checkbox" id=param.id name=param.name unchecked style="margin-left:100px")
+
+
+block content
+
+    .container-fluid.main
+
+        form.form-horizontal.well(style="padding: 50px 50px 30px 50px;")
+            fieldset
+                h1(style="margin-bottom:20px") Videoder Prompt Creator
+
+                +input-field({id:"prompt-name",parent_id:"prompt-name-container",label:"Prompt Name identifier",value: ""})
+                +input-field({id:"max-version-int",parent_id:"max-version-int-container",label:"Max Version",value: "", type:"number"})
+                +input-field({id:"min-version-int",parent_id:"min-version-int-container",label:"Min Version",value: "", type:"number"})
+                +input-field({id:"min-download-int",parent_id:"min-download-int-container",label:"Min Download Count",value: "", type:"number"})
+                +input-field({id:"deeplink",parent_id:"deeplink-container",label:"Deeplink",value: ""})
+
+                +switch({name: "show-title-switch", tag: "Show Title", id: "show-title-switch", parent_id: "show-title-switch-container", checked: true})
+                +switch({name: "show-message-switch", tag: "Show Message", id: "show-message-switch", parent_id: "show-message-switch-container", checked: true})
+                +switch({name: "negative-button-switch", tag: "Show Negative Button", id: "latest-app-switch", parent_id: "negative-button-switch-container", checked: true})
+                +switch({name: "positive-button-switch", tag: "Show Positive Button", id: "latest-app-switch", parent_id: "positive-button-switch-container", checked: true})
+
+                #regions-data-container
+                    - for (var i=0; i<available_locales.length; i++)
+                        +localeData({title:available_locales[i]})
+
+                +input-field({id: "username", parent_id: "username_container", label: "Username", hint: "Enter Username", value: "", type: "text"})
+                +input-field({id: "password", parent_id: "password_container", label: "Password", hint: "Enter Password",                     value: "", type: "password"})
+
+                a.btn.btn-raised.btn-primary(id="save-prompt" href="javascript:void(0)" style="margin: 25px auto;float:right") Save Prompt
+
+
+
+
+
+
